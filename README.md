@@ -1,6 +1,6 @@
 # Počítáme s Mariankou
 
-Matematická hra na tablet pro prvňáčka: sčítání a odčítání do 20, jednoduché násobení a dělení, porovnávání (< = >), geometrické tvary, umístění předmětů (vlevo, vpravo, nad, pod) a řady. Pokyny čte hlas (čeština, Web Speech API), odpověď se volí ze čtyř velkých tlačítek, zpětná vazba je okamžitá. Za správné odpovědi hvězdičky, za každé dokončené kolo samolepka do alba.
+Matematická hra na tablet pro prvňáčka: sčítání a odčítání do 20, jednoduché násobení a dělení, porovnávání (< = >), geometrické tvary, umístění předmětů (vlevo, vpravo, nad, pod), řady, hodiny, peníze a souměrnost. Pokyny čte hlas (čeština, Web Speech API), odpověď se volí ze čtyř velkých tlačítek, zpětná vazba je okamžitá. Za správné odpovědi hvězdičky, za každé dokončené kolo samolepka do alba.
 
 Hra: https://janzahradka.github.io/pocty/ (po zapnutí GitHub Pages)
 
@@ -21,3 +21,4 @@ Repozitář veřejný, GitHub Pages ze složky root větve `main`. Při každé 
 ## Fáze
 - [Fáze 1](docs/faze-1.md) – první hratelná verze
 - [Fáze 2](docs/faze-2.md) – porovnávání, tvary, kde to je, řady; zachování úspěchů a záloha
+- [Fáze 3](docs/faze-3.md) – hodiny, peníze, souměrnost

@@ -76,6 +76,31 @@ for (const op of L.KINDS) for (const lv of [1, 2, 3]) {
         if (items[idx] !== t.ans) bad('pos sloupec ' + t.speech);
       }
     }
+    if (op === 'clock') {
+      if (t.lv === 1 && (t.ans < 1 || t.ans > 12 || t.opts.some(v => v < 1 || v > 12))) bad('clock rozsah');
+      if (t.lv > 1 && t.ans !== L.tkey(t.h, t.m)) bad('clock klíč');
+      if (t.m === 30 && !t.okSay.includes('půl')) bad('clock půl ' + t.okSay);
+    }
+    if (op === 'money') {
+      const S = a => a.reduce((x, y) => x + y, 0);
+      if (t.coins && S(t.coins) !== t.ans) bad('money součet');
+      if (t.coins && lv === 1 && (t.ans > 10 || t.coins.some(c => c > 5))) bad('money1 rozsah');
+      if (t.coins && lv === 2 && (t.ans > 20 || t.ans < 6)) bad('money2 rozsah');
+      if (t.pay) {
+        const sums = t.opts.map(k => S(k.split('+').map(Number)));
+        if (sums.filter(x => x === t.price).length !== 1) bad('money platba nejednoznačná ' + t.opts);
+        if (S(t.ans.split('+').map(Number)) !== t.price) bad('money platba');
+        if (t.ans.split('+').length > 4) bad('money moc mincí');
+      }
+      if (t.change && t.ans !== t.have - t.price) bad('money vrácení');
+    }
+    if (op === 'sym') {
+      const half = L.hparse(t.half), ans = L.hparse(t.ans);
+      const want = JSON.stringify(t.axis === 'v' ? L.mirV(half) : L.mirH(half));
+      if (JSON.stringify(ans) !== want) bad('sym zrcadlo');
+      if (t.opts.filter(o => o === t.ans).length !== 1) bad('sym duplicita');
+      if (t.opts.length !== (lv === 1 ? 3 : 4)) bad('sym počet nabídek');
+    }
     if (op === 'seq') {
       if (t.items[t.qi] !== t.ans) bad('seq odpověď');
       if (!t.pattern) {
@@ -109,8 +134,8 @@ const v1 = { stars: 57, stickers: ['🐨', '🦉', '🐝', '🦁'], rounds: 6, l
 const m = L.migrate(JSON.parse(JSON.stringify(v1)));
 chk(m.stars, 57, 'migrace hvězdy'); chk(m.stickers, v1.stickers, 'migrace samolepky'); chk(m.rounds, 6, 'migrace kola');
 chk([m.levels.add, m.levels.sub, m.levels.mul, m.levels.div], [3, 2, 3, 1], 'migrace úrovně');
-chk([m.levels.cmp, m.levels.shape, m.levels.pos, m.levels.seq], [1, 1, 1, 1], 'nové úrovně');
-chk(m.adapt.sub, { up: 0, down: 1 }, 'migrace adapt'); chk(m.ver, 2, 'verze');
+chk([m.levels.cmp, m.levels.shape, m.levels.pos, m.levels.seq, m.levels.clock, m.levels.money, m.levels.sym], [1, 1, 1, 1, 1, 1, 1], 'nové úrovně');
+chk(m.adapt.sub, { up: 0, down: 1 }, 'migrace adapt'); chk(m.ver, 3, 'verze');
 chk(L.migrate(m), m, 'migrace je idempotentní');
 chk(L.migrate({ stars: 3, stickers: ['🐶'], budouci: { x: 1 } }).budouci, { x: 1 }, 'neznámé položky zůstanou');
 chk(L.migrate(null).stars, 0, 'prázdný stav');
@@ -122,6 +147,18 @@ if (new Set(L.STICKERS).size !== L.STICKERS.length) bad('duplicitní samolepky')
 const code1 = L.encodeBackup(m);
 chk(L.decodeBackup(code1), m, 'záloha tam a zpět'); chk(L.decodeBackup('nesmysl'), null, 'neplatná záloha');
 chk(L.STATE_KEY, 'pocty-v1', 'klíč úložiště');
+
+
+// ---- migrace stavu z verze 2 (fáze 2) ----
+const v2 = { ver: 2, stars: 187, stickers: ['🐨','🦉','🐝','🦁','🦖'], rounds: 19,
+  levels: { add: 3, sub: 2, mul: 3, div: 1, cmp: 3, shape: 2, pos: 3, seq: 1 },
+  adapt: { add: {up:1,down:0}, sub: {up:0,down:0}, mul: {up:0,down:0}, div: {up:0,down:0}, cmp: {up:2,down:0}, shape: {up:0,down:1}, pos: {up:0,down:0}, seq: {up:3,down:0} } };
+const m2 = L.migrate(JSON.parse(JSON.stringify(v2)));
+chk([m2.stars, m2.rounds, m2.stickers], [187, 19, v2.stickers], 'migrace v2 úspěchy');
+chk(['add','sub','mul','div','cmp','shape','pos','seq'].map(k => m2.levels[k]), [3,2,3,1,3,2,3,1], 'migrace v2 úrovně');
+chk([m2.levels.clock, m2.levels.money, m2.levels.sym], [1,1,1], 'nové úrovně v3');
+chk(m2.adapt.seq, {up:3, down:0}, 'migrace v2 adapt'); chk(m2.ver, 3, 'verze 3');
+chk(L.decodeBackup(L.encodeBackup(v2)).stars, 187, 'záloha z v2 jde obnovit');
 
 console.log(fails ? `\n${fails} CHYB` : '\nVše OK');
 process.exit(fails ? 1 : 0);
