@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#fff4dc">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Počty">
+<title>Počítáme s Mariankou</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;overflow:hidden;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+[hidden]{display:none!important}
+:root{
+  --bg:#fff4dc; --bg-2:#ffe7b8; --ink:#2b2350; --muted:#7a6f9c; --card:#ffffff;
+  --orange:#ff8a3d; --purple:#7b5cff; --green:#22b56a; --red:#ff5d5d; --blue:#2f9bff; --pink:#ff5fa8; --yellow:#ffc928;
+  --shadow:0 6px 0 rgba(43,35,80,.18);
+  --f:"Baloo 2","Trebuchet MS","Arial Rounded MT Bold",system-ui,sans-serif;
+}
+body{background:radial-gradient(circle at 20% 10%,#fffaf0 0,var(--bg) 45%,var(--bg-2) 100%);color:var(--ink);font-family:var(--f)}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;padding:max(12px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+button{font-family:inherit;color:inherit;border:0;cursor:pointer}
+.btn{background:var(--card);border-radius:22px;box-shadow:var(--shadow);transition:transform .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(43,35,80,.18)}
+.round{width:64px;height:64px;border-radius:50%;font-size:32px;display:grid;place-items:center;flex:none}
+
+/* Domů */
+#home{align-items:center;justify-content:center;gap:clamp(12px,3vh,28px)}
+.title{font-size:clamp(34px,6vw,64px);font-weight:800;line-height:1;text-align:center;margin:0}
+.title span{color:var(--orange)}
+.badges{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.badge{background:var(--card);border-radius:999px;padding:6px 18px;font-size:clamp(20px,3vw,28px);font-weight:700;box-shadow:var(--shadow)}
+.tiles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(10px,2vw,22px);width:min(1000px,100%)}
+.tile{aspect-ratio:1/1.05;border-radius:28px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:0 8px 0 rgba(0,0,0,.18)}
+.tile:active{transform:translateY(5px);box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.tile b{font-size:clamp(48px,9vw,96px);line-height:1}
+.tile small{font-size:clamp(14px,2vw,22px);font-weight:700;opacity:.95}
+.tile .lv{font-size:clamp(14px,1.8vw,20px);letter-spacing:2px}
+.t-add{background:var(--green)} .t-sub{background:var(--blue)} .t-mul{background:var(--purple)} .t-div{background:var(--pink)} .t-mix{background:var(--orange)}
+.album-btn{font-size:clamp(22px,3vw,30px);font-weight:700;padding:10px 28px}
+.warn{background:#fff;border:3px dashed var(--red);border-radius:16px;padding:8px 14px;font-size:16px;max-width:560px;text-align:center}
+@media (max-width:640px){.tiles{grid-template-columns:repeat(3,1fr)}}
+
+/* Hra */
+#game{gap:10px}
+.top{display:flex;align-items:center;gap:12px}
+.dots{flex:1;display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.dot{width:clamp(18px,3vw,30px);height:clamp(18px,3vw,30px);border-radius:50%;background:rgba(43,35,80,.12);display:grid;place-items:center;font-size:clamp(12px,2vw,20px)}
+.dot.cur{outline:4px solid var(--orange);outline-offset:2px}
+.dot.first{background:var(--yellow)} .dot.retry{background:#ffe48a} .dot.miss{background:#d9d3ea}
+.starcount{font-size:clamp(22px,3vw,30px);font-weight:800;background:var(--card);border-radius:999px;padding:4px 16px;box-shadow:var(--shadow);white-space:nowrap}
+.stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,2vh,20px)}
+.pics{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(8px,1.6vw,18px);max-width:100%}
+.grp{display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:2px;background:rgba(255,255,255,.75);border:3px solid rgba(43,35,80,.12);border-radius:20px;padding:8px}
+.it{font-size:var(--isz,48px);line-height:1.1;position:relative;display:inline-block}
+.it.gone{opacity:.35}
+.it.moved{opacity:.18;filter:grayscale(1)}
+.it.gone::after{content:"";position:absolute;inset:8% 0;background:linear-gradient(45deg,transparent 44%,var(--red) 44% 56%,transparent 56%),linear-gradient(-45deg,transparent 44%,var(--red) 44% 56%,transparent 56%)}
+.op-sign{font-size:calc(var(--isz,48px) * 1.1);font-weight:800;color:var(--muted)}
+.friends{display:flex;gap:clamp(8px,2vw,22px);justify-content:center;flex-wrap:wrap}
+.friend{display:flex;flex-direction:column;align-items:center;gap:4px}
+.friend .face{font-size:var(--isz,48px);line-height:1}
+.plate{min-width:calc(var(--isz,48px)*1.6);min-height:calc(var(--isz,48px)*0.9);background:#fff;border:3px solid rgba(43,35,80,.15);border-radius:999px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;padding:2px 8px;font-size:calc(var(--isz,48px)*.55)}
+.eq{display:flex;align-items:center;gap:clamp(8px,1.5vw,18px);font-size:clamp(44px,9vw,110px);font-weight:800;line-height:1}
+.eq .sym{color:var(--muted)}
+.eq .q{min-width:1.3em;padding:0 .15em;text-align:center;border-radius:20px;background:#fff;border:5px dashed var(--orange);color:var(--orange)}
+.eq .q.filled{border-style:solid;border-color:var(--green);color:var(--green)}
+.eq .q.shown{border-style:solid;border-color:var(--purple);color:var(--purple)}
+.answers{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,2vw,22px);padding-bottom:4px}
+.ans{font-size:clamp(44px,8vw,92px);font-weight:800;padding:clamp(4px,1.5vh,16px) 0;border-radius:26px;background:#fff;box-shadow:0 7px 0 rgba(43,35,80,.2)}
+.ans:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(43,35,80,.2)}
+.ans.ok{background:var(--green);color:#fff;animation:pop .45s}
+.ans.bad{background:#ffd6d6;color:#c53b3b;animation:shake .45s;box-shadow:0 2px 0 rgba(43,35,80,.12);transform:translateY(4px)}
+.ans.reveal{background:var(--purple);color:#fff;animation:pop .45s}
+@media (max-width:640px) and (orientation:portrait){.answers{grid-template-columns:repeat(2,1fr)}}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translate(0,4px)}20%{transform:translate(-12px,4px)}40%{transform:translate(12px,4px)}60%{transform:translate(-8px,4px)}80%{transform:translate(8px,4px)}}
+.banner{position:fixed;left:50%;top:22%;transform:translate(-50%,-50%) scale(.6);opacity:0;pointer-events:none;font-size:clamp(36px,7vw,80px);font-weight:800;color:var(--orange);text-shadow:0 4px 0 #fff,0 0 30px #fff;transition:all .3s;white-space:nowrap;z-index:5}
+.banner.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.fly{position:fixed;pointer-events:none;font-size:40px;z-index:6;transition:transform 1s cubic-bezier(.2,.7,.3,1),opacity 1s}
+
+/* Konec kola, album */
+#end,#album{align-items:center;justify-content:center;gap:clamp(12px,3vh,26px);text-align:center}
+.big-stars{font-size:clamp(30px,5vw,56px);font-weight:800}
+.sticker-new{font-size:clamp(120px,22vw,240px);line-height:1;animation:sticker 1.2s cubic-bezier(.2,1.6,.4,1)}
+@keyframes sticker{0%{transform:scale(0) rotate(-200deg)}100%{transform:scale(1) rotate(0)}}
+.row{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+.wide{font-size:clamp(26px,4vw,40px);font-weight:800;padding:12px 34px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(64px,10vw,100px),1fr));gap:12px;width:min(1000px,100%);overflow:auto;padding:6px}
+.slot{aspect-ratio:1;background:#fff;border-radius:20px;display:grid;place-items:center;font-size:clamp(40px,6vw,64px);box-shadow:var(--shadow)}
+.slot.empty{background:rgba(255,255,255,.45);color:rgba(43,35,80,.25);font-size:clamp(28px,4vw,40px);font-weight:800;box-shadow:none;border:3px dashed rgba(43,35,80,.15)}
+</style>
+</head>
+<body>
+
+<section id="home" class="screen">
+  <h1 class="title">Počítáme s <span>Mariankou</span></h1>
+  <div class="badges"><div class="badge">⭐ <span id="h-stars">0</span></div><div class="badge">🎁 <span id="h-stk">0</span></div></div>
+  <div class="tiles">
+    <button class="tile t-add" data-mode="add"><b>+</b><small>sčítání</small><span class="lv" data-lv="add"></span></button>
+    <button class="tile t-sub" data-mode="sub"><b>−</b><small>odčítání</small><span class="lv" data-lv="sub"></span></button>
+    <button class="tile t-mul" data-mode="mul"><b>·</b><small>násobení</small><span class="lv" data-lv="mul"></span></button>
+    <button class="tile t-div" data-mode="div"><b>:</b><small>dělení</small><span class="lv" data-lv="div"></span></button>
+    <button class="tile t-mix" data-mode="mix"><b>🎲</b><small>všechno</small><span class="lv"></span></button>
+  </div>
+  <button class="btn album-btn" id="to-album">🎁 Samolepky</button>
+  <div class="warn" id="novoice" hidden>Na tomto zařízení chybí český hlas, pokyny nebude slyšet. Doinstalujte ho v nastavení zařízení (Převod textu na řeč / Mluvený obsah → čeština).</div>
+</section>
+
+<section id="game" class="screen" hidden>
+  <div class="top">
+    <button class="btn round" id="g-home" aria-label="Domů">🏠</button>
+    <div class="dots" id="dots"></div>
+    <div class="starcount">⭐ <span id="g-stars">0</span></div>
+    <button class="btn round" id="g-say" aria-label="Zopakovat">🔊</button>
+  </div>
+  <div class="stage">
+    <div id="pics"></div>
+    <div class="eq" id="eq"></div>
+  </div>
+  <div class="answers" id="answers"></div>
+</section>
+
+<section id="end" class="screen" hidden>
+  <div class="title">Hotovo!</div>
+  <div class="big-stars" id="e-stars"></div>
+  <div class="sticker-new" id="e-sticker"></div>
+  <div class="row">
+    <button class="btn wide" id="e-again">🔁 Znovu</button>
+    <button class="btn wide" id="e-home">🏠 Domů</button>
+  </div>
+</section>
+
+<section id="album" class="screen" hidden>
+  <div class="title">Moje samolepky</div>
+  <div class="grid" id="a-grid"></div>
+  <button class="btn wide" id="a-home">🏠 Domů</button>
+</section>
+
+<div class="banner" id="banner"></div>
+
+<!-- Logika úloh: bez DOM, testovatelná v Node (tests/gen.test.js) -->
+<script id="logic">
+const R = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+// --- čeština: čísla slovy a skloňování ---
+const ONES = ['nula','jedna','dva','tři','čtyři','pět','šest','sedm','osm','devět','deset','jedenáct','dvanáct','třináct','čtrnáct','patnáct','šestnáct','sedmnáct','osmnáct','devatenáct'];
+const TENS = ['','','dvacet','třicet','čtyřicet','padesát','šedesát','sedmdesát','osmdesát','devadesát'];
+// g: undefined = čtení příkladu (jedna, dva), 'm' = rod mužský (jeden, dva), 'f' = ženský (jedna, dvě), 'fa' = ženský 4. pád (jednu, dvě)
+function w(n, g){
+  if (n === 1 && g === 'm') return 'jeden';
+  if (n === 1 && g === 'fa') return 'jednu';
+  if (n === 2 && (g === 'f' || g === 'fa')) return 'dvě';
+  if (n < 20) return ONES[n];
+  if (n === 100) return 'sto';
+  const t = Math.floor(n / 10), o = n % 10;
+  return TENS[t] + (o ? ' ' + w(o, g) : '');
+}
+const INS = {1:'jednou',2:'dvěma',3:'třemi',4:'čtyřmi',5:'pěti',6:'šesti',7:'sedmi',8:'osmi',9:'devíti',10:'deseti'};
+const pl = (n, one, few, many) => n === 1 ? one : (n >= 2 && n <= 4 ? few : many);
+const jeJsou = n => (n >= 2 && n <= 4) ? 'jsou' : 'je';
+
+const ITEMS = ['🍎','🍓','🐞','🎈','🐟','🌸','🍪','🦋','🐥','🍐','🧁','🚗'];
+const FRIENDS = ['🐻','🐰','🐱','🐶','🦊','🐼'];
+const OPS = ['add','sub','mul','div'];
+const SIGN = {add:'+', sub:'−', mul:'·', div:':'};
+const WORD = {add:'plus', sub:'minus', mul:'krát'};
+
+// Úlohu popisuje: op, a, b, r (výsledek příkladu), ans (správná odpověď), missing (která pozice je "?"), pics, speech
+function make(op, a, b, opts = {}){
+  const r = op === 'add' ? a + b : op === 'sub' ? a - b : op === 'mul' ? a * b : a / b;
+  const missing = opts.missing || 'r';                       // 'r' = výsledek, 'b' = druhé číslo
+  const ans = missing === 'r' ? r : b;
+  const t = { op, a, b, r, ans, missing, pics: !!opts.pics, item: pick(ITEMS) };
+  t.speech = speech(t);
+  return t;
+}
+
+function speech(t){
+  const { op, a, b, r } = t;
+  if (t.missing === 'b') {
+    return `${cap(w(a))} ${WORD[op]} kolik je ${w(r)}?`;
+  }
+  if (op === 'div') {
+    if (t.pics) return `Rozděl ${w(a,'m')} ${pl(a,'bonbón','bonbóny','bonbónů')} mezi ${w(b,'m')} ${pl(b,'kamaráda','kamarády','kamarádů')}. Kolik dostane každý?`;
+    return `Kolik je ${w(a)} děleno ${INS[b]}?`;
+  }
+  if (op === 'mul' && t.pics) {
+    return `${cap(jeJsou(a))} tu ${w(a,'f')} ${pl(a,'skupinka','skupinky','skupinek')}. V každé ${jeJsou(b)} ${w(b,'m')} ${pl(b,'obrázek','obrázky','obrázků')}. Kolik je to dohromady?`;
+  }
+  let s = `Kolik je ${w(a)} ${WORD[op]} ${w(b)}?`;
+  if (t.pics && op === 'add') s += ' Spočítej obrázky.';
+  if (t.pics && op === 'sub') s += ' Přeškrtnuté obrázky už tam nejsou.';
+  return s;
+}
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+// --- generátory podle úrovně 1–3 ---
+const GEN = {
+  add(lv){
+    if (lv === 1){ const a = R(1,5), b = R(1,5); return make('add', a, b, {pics:true}); }
+    if (lv === 2){
+      if (Math.random() < .4){ const s = R(6,10), a = R(1,s-1); return make('add', a, s-a); }
+      const u1 = R(0,8), u2 = R(1,9-u1);                     // bez přechodu přes desítku
+      return Math.random() < .5 ? make('add', 10+u1, u2) : make('add', u2, 10+u1);
+    }
+    let a, b; do { a = R(2,9); b = R(2,9); } while (a + b <= 10);   // přechod přes desítku
+    return make('add', a, b, {missing: Math.random() < .3 ? 'b' : 'r'});
+  },
+  sub(lv){
+    if (lv === 1){ const a = R(3,10), b = R(1,a-1); return make('sub', a, b, {pics:true}); }
+    if (lv === 2){
+      const k = Math.random();
+      if (k < .35){ const a = R(5,10); return make('sub', a, R(1,a-1)); }
+      if (k < .5){ return make('sub', R(11,19), 10); }
+      const u = R(1,9); return make('sub', 10+u, R(1,u));    // bez přechodu přes desítku
+    }
+    const a = R(11,18), b = R(a%10+1, 9);                     // přechod přes desítku
+    return make('sub', a, b, {missing: Math.random() < .3 ? 'b' : 'r'});
+  },
+  mul(lv){
+    if (lv === 1) return make('mul', R(2,3), R(2,4), {pics:true});
+    if (lv === 2){ let a, b; do { a = R(2,5); b = R(2,5); } while (a*b > 20); return make('mul', a, b, {pics:true}); }
+    let a, b; do { a = R(2,5); b = R(2,6); } while (a*b > 30);
+    return make('mul', a, b);
+  },
+  div(lv){
+    if (lv === 1){ const q = R(1,5); return make('div', 2*q, 2, {pics:true}); }
+    if (lv === 2){ let d, q; do { d = R(2,4); q = R(1,5); } while (d*q > 20); return make('div', d*q, d, {pics:true}); }
+    let d, q; do { d = R(2,5); q = R(2,6); } while (d*q > 30);
+    return make('div', d*q, d);
+  }
+};
+
+function choices(t){
+  const n = t.ans, set = new Set([n]);
+  const cand = shuffle([n+1, n-1, n+2, n-2]);
+  if (t.op === 'add' && t.missing === 'r') cand.push(Math.abs(t.a - t.b));
+  if (t.op === 'sub' && t.missing === 'r') cand.push(t.a + t.b);
+  if (t.op === 'mul') cand.push(t.a + t.b);
+  if (t.op === 'div') cand.push(t.a - t.b);
+  if (n >= 10 && t.op !== 'mul') cand.push(n + 10, n - 10);
+  const pref = shuffle(cand.slice(0, 2)).concat(shuffle(cand.slice(2)));
+  for (const c of pref){ if (set.size >= 4) break; if (c >= 0 && c !== n) set.add(c); }
+  let k = 3; while (set.size < 4){ set.add(n + k); k++; }
+  return [...set].sort((x, y) => x - y);
+}
+
+// Adaptivní obtížnost: 4× za sebou napoprvé → úroveň výš, 2× za sebou ne napoprvé → úroveň níž
+function adapt(state, op, firstTry){
+  const ad = state.adapt[op], lv = state.levels[op];
+  if (firstTry){ ad.down = 0; ad.up++; if (ad.up >= 4 && lv < 3){ state.levels[op] = lv + 1; ad.up = 0; return 'up'; } }
+  else { ad.up = 0; ad.down++; if (ad.down >= 2 && lv > 1){ state.levels[op] = lv - 1; ad.down = 0; return 'down'; } }
+  return null;
+}
+
+function nextOp(mode, prev){
+  if (mode !== 'mix') return mode;
+  const pool = ['add','add','sub','sub','mul','div'];
+  let o; do { o = pick(pool); } while (o === prev && Math.random() < .5);
+  return o;
+}
+
+const STICKERS = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔','🐧','🐦','🐤','🦆','🦉','🦄','🐝','🦋','🐌','🐞','🐢','🐙','🦀','🐠','🐬','🐳','🦒','🦓','🦔','🐿️','🦜','🦩','🐘','🦕'];
+
+if (typeof module !== 'undefined') module.exports = { R, w, pl, GEN, make, choices, adapt, nextOp, speech, STICKERS, OPS };
+</script>
+
+<script>
+const $ = s => document.querySelector(s);
+const ROUND = 10;
+
+// --- uložený stav ---
+const KEY = 'pocty-v1';
+function freshState(){ return { stars:0, stickers:[], rounds:0, levels:{add:1,sub:1,mul:1,div:1}, adapt:{add:{up:0,down:0},sub:{up:0,down:0},mul:{up:0,down:0},div:{up:0,down:0}} }; }
+let S = freshState();
+try { const raw = localStorage.getItem(KEY); if (raw){ const o = JSON.parse(raw); S = Object.assign(freshState(), o); S.levels = Object.assign(freshState().levels, o.levels); S.adapt = Object.assign(freshState().adapt, o.adapt); } } catch(e){}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+
+// --- hlas ---
+let voice = null, voicesChecked = false;
+function pickVoice(){
+  if (!('speechSynthesis' in window)) return;
+  const vs = speechSynthesis.getVoices();
+  if (!vs.length) return;
+  voicesChecked = true;
+  voice = vs.find(v => /^cs([-_]|$)/i.test(v.lang) && v.localService) || vs.find(v => /^cs/i.test(v.lang)) || null;
+  $('#novoice').hidden = !!voice;
+}
+if ('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+setTimeout(() => { pickVoice(); if (!('speechSynthesis' in window) || (!voicesChecked)) $('#novoice').hidden = !!voice; }, 2000);
+
+let sayToken = 0;
+function say(text, onend){
+  const my = ++sayToken;
+  let done = false;
+  const fin = () => { if (done) return; done = true; if (onend && my === sayToken) onend(); };
+  if (!('speechSynthesis' in window)){ setTimeout(fin, 700); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'cs-CZ'; if (voice) u.voice = voice;
+  u.rate = .92; u.pitch = 1.1;
+  u.onend = fin; u.onerror = fin;
+  setTimeout(fin, 1500 + text.length * 85);      // pojistka, když prohlížeč onend nepošle
+  speechSynthesis.speak(u);
+}
+
+// --- zvuky ---
+let ac = null;
+function actx(){
+  if (!ac){ try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ return null; } }
+  if (ac.state === 'suspended') ac.resume();
+  return ac;
+}
+function tone(f, t0, dur, type = 'triangle', vol = .18){
+  const c = ac, o = c.createOscillator(), g = c.createGain();
+  o.type = type; o.frequency.setValueAtTime(f, t0);
+  g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(vol, t0 + .02); g.gain.exponentialRampToValueAtTime(.001, t0 + dur);
+  o.connect(g).connect(c.destination); o.start(t0); o.stop(t0 + dur + .05);
+}
+function sfx(kind){
+  const c = actx(); if (!c) return; const t = c.currentTime;
+  if (kind === 'ok') [523, 659, 784, 1047].forEach((f, i) => tone(f, t + i * .08, .22));
+  if (kind === 'bad'){ tone(220, t, .25, 'sine', .2); tone(180, t + .15, .3, 'sine', .2); }
+  if (kind === 'tap') tone(660, t, .08, 'sine', .1);
+  if (kind === 'win') [523, 659, 784, 659, 784, 1047, 1319].forEach((f, i) => tone(f, t + i * .12, .3));
+}
+
+// --- obrazovky ---
+function show(id){ for (const s of document.querySelectorAll('.screen')) s.hidden = s.id !== id; }
+function homeRender(){
+  $('#h-stars').textContent = S.stars;
+  $('#h-stk').textContent = S.stickers.length;
+  for (const el of document.querySelectorAll('[data-lv]')) el.textContent = '●'.repeat(S.levels[el.dataset.lv]) + '○'.repeat(3 - S.levels[el.dataset.lv]);
+  show('home');
+}
+const MODE_NAME = { add:'Sčítání', sub:'Odčítání', mul:'Násobení', div:'Dělení', mix:'Všechno dohromady' };
+
+for (const b of document.querySelectorAll('.tile')) b.addEventListener('click', () => {
+  actx(); sfx('tap');
+  const mode = b.dataset.mode;
+  say(MODE_NAME[mode] + '!', () => startRound(mode));
+});
+$('#to-album').addEventListener('click', () => { actx(); sfx('tap'); albumRender(); });
+$('#a-home').addEventListener('click', () => { sfx('tap'); window.speechSynthesis && speechSynthesis.cancel(); homeRender(); });
+$('#e-home').addEventListener('click', () => { sfx('tap'); window.speechSynthesis && speechSynthesis.cancel(); homeRender(); });
+$('#e-again').addEventListener('click', () => { sfx('tap'); startRound(round.mode); });
+$('#g-home').addEventListener('click', () => { sayToken++; if ('speechSynthesis' in window) speechSynthesis.cancel(); round = null; homeRender(); });
+$('#g-say').addEventListener('click', () => { if (task) say(task.speech); });
+
+// --- kolo ---
+let round = null, task = null, tries = 0, locked = true;
+const OK = ['Správně!', 'Výborně!', 'Skvělé!', 'Paráda!', 'Bezva!', 'Super!'];
+const AGAIN = ['Ještě jednou.', 'Zkus to znovu.', 'Skoro! Zkus jiné číslo.'];
+
+function startRound(mode){
+  round = { mode, i: 0, res: [], streak: 0, stars: 0, prevOp: null };
+  show('game');
+  nextTask();
+}
+
+function nextTask(){
+  if (!round) return;
+  if (round.i >= ROUND) return endRound();
+  const op = nextOp(round.mode, round.prevOp); round.prevOp = op;
+  task = GEN[op](S.levels[op]);
+  tries = 0; locked = false;
+  renderTask();
+  say(task.speech);
+}
+
+function renderDots(){
+  const d = $('#dots'); d.innerHTML = '';
+  for (let i = 0; i < ROUND; i++){
+    const el = document.createElement('div'); el.className = 'dot';
+    const r = round.res[i];
+    if (r){ el.classList.add(r); el.textContent = r === 'miss' ? '' : '⭐'; }
+    if (i === round.i) el.classList.add('cur');
+    d.appendChild(el);
+  }
+  $('#g-stars').textContent = S.stars;
+}
+
+function item(ch, cls = ''){ const s = document.createElement('span'); s.className = 'it ' + cls; s.textContent = ch; return s; }
+function group(n, ch, goneFrom = Infinity){ const g = document.createElement('div'); g.className = 'grp'; for (let i = 0; i < n; i++) g.appendChild(item(ch, i >= goneFrom ? 'gone' : '')); return g; }
+function sign(ch){ const s = document.createElement('span'); s.className = 'op-sign'; s.textContent = ch; return s; }
+
+function renderTask(){
+  renderDots();
+  const t = task, p = $('#pics');
+  p.innerHTML = ''; p.className = '';
+  if (t.pics){
+    const total = t.op === 'add' ? t.a + t.b : t.a;
+    const H = window.innerHeight, W = window.innerWidth;
+    const sz = Math.max(30, Math.min(72, Math.floor(Math.min(H * .1, W / (Math.min(total, 10) + 3)))));
+    p.style.setProperty('--isz', sz + 'px');
+    const wrap = document.createElement('div'); wrap.className = 'pics';
+    if (t.op === 'add'){ wrap.append(group(t.a, t.item), sign('+'), group(t.b, t.item)); p.appendChild(wrap); }
+    if (t.op === 'sub'){ wrap.append(group(t.a, t.item, t.a - t.b)); p.appendChild(wrap); }
+    if (t.op === 'mul'){ for (let i = 0; i < t.a; i++) wrap.appendChild(group(t.b, t.item)); p.appendChild(wrap); }
+    if (t.op === 'div'){
+      wrap.appendChild(group(t.a, '🍬')); p.appendChild(wrap);
+      const fr = document.createElement('div'); fr.className = 'friends'; fr.style.marginTop = '14px';
+      const faces = shuffleArr(['🐻','🐰','🐱','🐶','🦊','🐼']);
+      for (let i = 0; i < t.b; i++){
+        const f = document.createElement('div'); f.className = 'friend';
+        f.innerHTML = `<div class="face">${faces[i]}</div><div class="plate"></div>`;
+        fr.appendChild(f);
+      }
+      p.appendChild(fr);
+    }
+  }
+  const eq = $('#eq'); eq.innerHTML = '';
+  const parts = [t.a, SIGN[t.op], t.b, '=', t.r];
+  const qIdx = t.missing === 'b' ? 2 : 4;
+  parts.forEach((v, i) => {
+    const s = document.createElement('span');
+    if (i === qIdx){ s.className = 'q'; s.id = 'q'; s.textContent = '?'; }
+    else { s.textContent = v; if (i === 1 || i === 3) s.className = 'sym'; }
+    eq.appendChild(s);
+  });
+  const ans = $('#answers'); ans.innerHTML = '';
+  for (const c of choices(t)){
+    const b = document.createElement('button'); b.className = 'ans'; b.textContent = c;
+    b.addEventListener('click', () => answer(c, b));
+    ans.appendChild(b);
+  }
+}
+function shuffleArr(a){ return shuffle(a.slice()); }
+
+function fillPlates(){
+  if (task.op !== 'div' || !task.pics) return;
+  for (const pl of document.querySelectorAll('.plate')) pl.textContent = '🍬'.repeat(task.ans);
+  for (const it of document.querySelectorAll('#pics .grp .it')) it.classList.add('moved');
+}
+
+function answer(val, btn){
+  if (locked || btn.disabled) return;
+  actx();
+  if (val === task.ans){
+    locked = true;
+    btn.classList.add('ok');
+    const q = $('#q'); q.textContent = task.ans; q.classList.add('filled');
+    fillPlates();
+    sfx('ok');
+    const first = tries === 0;
+    round.res[round.i] = first ? 'first' : 'retry';
+    round.stars++; S.stars++;
+    round.streak = first ? round.streak + 1 : 0;
+    adapt(S, task.op, first); save();
+    flyStar(btn);
+    let phrase = pick(OK);
+    if (round.streak === 3){ phrase = 'Tři za sebou! ' + phrase; showBanner('🔥 3× za sebou!'); }
+    else if (round.streak === 5){ phrase = 'Pět za sebou! Jsi hvězda!'; showBanner('🌟 5× za sebou!'); }
+    else if (round.streak > 5 && round.streak % 5 === 0){ phrase = 'Neuvěřitelné! Už ' + w(round.streak) + ' za sebou!'; showBanner('🚀 ' + round.streak + '× za sebou!'); }
+    renderDots();
+    say(phrase, () => setTimeout(advance, 350));
+  } else {
+    tries++;
+    btn.classList.add('bad'); btn.disabled = true;
+    sfx('bad');
+    round.streak = 0;
+    if (tries < 2){ say(pick(AGAIN)); return; }
+    locked = true;
+    round.res[round.i] = 'miss';
+    adapt(S, task.op, false); save();
+    for (const b of document.querySelectorAll('.ans')) if (+b.textContent === task.ans) b.classList.add('reveal');
+    const q = $('#q'); q.textContent = task.ans; q.classList.add('shown');
+    fillPlates();
+    renderDots();
+    say('Správně je ' + w(task.ans) + '. Příště to dáš!', () => setTimeout(advance, 900));
+  }
+}
+function advance(){ if (!round) return; round.i++; nextTask(); }
+
+function showBanner(txt){
+  const b = $('#banner'); b.textContent = txt; b.classList.add('on');
+  setTimeout(() => b.classList.remove('on'), 1400);
+}
+function flyStar(fromEl){
+  const r = fromEl.getBoundingClientRect(), to = $('#g-stars').getBoundingClientRect();
+  for (let k = 0; k < 3; k++){
+    const s = document.createElement('div'); s.className = 'fly'; s.textContent = '⭐';
+    s.style.left = (r.left + r.width / 2 - 20) + 'px'; s.style.top = (r.top + r.height / 2 - 20) + 'px';
+    document.body.appendChild(s);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      s.style.transform = `translate(${to.left - r.left - r.width / 2 + (k - 1) * 30}px, ${to.top - r.top - r.height / 2}px) scale(.5)`;
+      s.style.opacity = '0';
+    }));
+    setTimeout(() => s.remove(), 1100);
+  }
+}
+
+function endRound(){
+  const r = round;
+  const free = STICKERS.filter(s => !S.stickers.includes(s));
+  const stk = free.length ? pick(free) : pick(STICKERS);
+  if (free.length) S.stickers.push(stk);
+  S.rounds++; save();
+  task = null;
+  const perfect = r.res.every(x => x === 'first');
+  $('#e-stars').textContent = '⭐ ' + r.stars + ' / ' + ROUND;
+  $('#e-sticker').textContent = stk;
+  show('end');
+  sfx('win');
+  const n = r.stars;
+  let txt = `Hotovo! Získala jsi ${w(n,'fa')} ${pl(n,'hvězdičku','hvězdičky','hvězdiček')} a novou samolepku.`;
+  if (n === 0) txt = 'Hotovo! Za snahu dostáváš novou samolepku.';
+  if (perfect) txt = 'Úžasné! Všechno napoprvé! ' + txt;
+  say(txt);
+}
+
+function albumRender(){
+  const g = $('#a-grid'); g.innerHTML = '';
+  for (let i = 0; i < STICKERS.length; i++){
+    const s = document.createElement('div');
+    const have = S.stickers[i];
+    s.className = 'slot' + (have ? '' : ' empty');
+    s.textContent = have || '?';
+    g.appendChild(s);
+  }
+  show('album');
+  const n = S.stickers.length;
+  say(n ? `Máš ${w(n,'fa')} ${pl(n,'samolepku','samolepky','samolepek')}.` : 'Zatím tu nic není. Zahraj si a získej první samolepku!');
+}
+
+homeRender();
+if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
