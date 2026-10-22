@@ -6,9 +6,9 @@ Hra na tablet se dvěma profily: **školák** (Marianka, 1. třída) a **předš
 
 Předškolák: kolik jich je, barvy, tvary, velké a malé, kde to je, řady, co sem nepatří, dvojice, číslice. Odpovědi obrázkem, 2–3 možnosti, kratší kolo, pomalejší hlas. Parametry profilů jsou v `PROFILES`.
 
-Úrovně: školák 1–5, předškolák 1–3. Logika (školák): bludiště, sudoku s obrázky, váhy.
+Úrovně: školák 1–5, předškolák 1–3; bez stropu: bludiště (oba), sudoku a paměť a pozornost (školák). Logika (školák): bludiště, sudoku s obrázky, váhy.
 
-Verze: loďka vlevo dole na úvodní obrazovce veze obrázek verze (🦓 zebra = verze 7). Seznam je v `VERSIONS`, podrobnosti v rodičovské obrazovce.
+Verze: loďka vlevo dole na úvodní obrazovce veze obrázek verze (🐍 had = verze 8). Seznam je v `VERSIONS`, podrobnosti v rodičovské obrazovce.
 
 Jazyk: vlajky 🇨🇿 / 🇬🇧 kdykoli přepnou hru a přečtou celé zadání v daném jazyce. Další úloha stejného typu má krátké zadání.
 
@@ -18,7 +18,7 @@ Hra: https://janzahradka.github.io/pocty/ (po zapnutí GitHub Pages)
 - Postup (hvězdičky, samolepky, úrovně) ukládá zařízení do localStorage (`pocty-v1`). Klíč se mezi verzemi nemění, nové verze stav jen doplní (`migrate()`).
 - Záloha pro rodiče: dlouhý stisk (2 s) na nadpis na úvodní obrazovce → zkopírovat / obnovit zálohu.
 - PWA: `manifest.webmanifest`, `sw.js`. Na tabletu „Přidat na plochu“ → běží na celou obrazovku a po prvním načtení i offline.
-- Test logiky: `node tests/gen.test.js` (včetně `tests/faze4.part.js` až `tests/faze6.part.js`).
+- Test logiky: `node tests/gen.test.js` (včetně `tests/faze4.part.js` až `tests/faze7.part.js`).
 
 ## Hlas
 Pokyny používají systémový český hlas zařízení. Když chybí, úvodní obrazovka zobrazí upozornění.
@@ -26,7 +26,7 @@ Pokyny používají systémový český hlas zařízení. Když chybí, úvodní
 - iPad: Nastavení → Zpřístupnění → Mluvený obsah → Hlasy → Čeština (Zuzana / Iveta).
 
 ## Nasazení
-Repozitář veřejný, GitHub Pages ze složky root větve `main`. Při každé změně souborů zvýšit `CACHE` v `sw.js` a přidat řádek do `VERSIONS` v `index.html` (nový obrázek na loďce). Při změně tvaru uloženého stavu zvýšit `STATE_VER` a rozšířit `migrate()` (nikdy neměnit `STATE_KEY` ani pořadí `STICKERS`, nové samolepky jen na konec).
+Repozitář veřejný, GitHub Pages ze složky root větve `main`. Při každé změně souborů zvýšit `CACHE` v `sw.js` a přidat řádek do `VERSIONS` v `index.html` (nový obrázek na loďce). Generátory úloh nesmí nastavovat pole `start`, `repeat`, `play`, `hidden`, `useShort` (UI je používá jako funkce a stav). Při změně tvaru uloženého stavu zvýšit `STATE_VER` a rozšířit `migrate()` (nikdy neměnit `STATE_KEY` ani pořadí `STICKERS`, nové samolepky jen na konec).
 
 ## Fáze
 - [Fáze 1](docs/faze-1.md) – první hratelná verze
@@ -35,3 +35,4 @@ Repozitář veřejný, GitHub Pages ze složky root větve `main`. Při každé 
 - [Fáze 4](docs/faze-4.md) – předškolák (Rostík), paměť a pozornost
 - [Fáze 5](docs/faze-5.md) – čeština / angličtina, kratší zadání
 - [Fáze 6](docs/faze-6.md) – úrovně 4–5, logika (bludiště, sudoku, váhy), verze na loďce
+- [Fáze 7](docs/faze-7.md) – úrovně bez stropu, těžší bludiště s výběrem velikosti, opravené váhy

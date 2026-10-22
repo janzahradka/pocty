@@ -84,24 +84,13 @@ module.exports = function (L, bad, chk) {
   // ---- logika ----
   for (const lv of [1, 2, 3, 4, 5]) {
     for (let i = 0; i < 400; i++) {
-      // bludiště: dokonalé (strom), obousměrné stěny, cesta existuje, klíč ve slepé uličce
+      // bludiště: testuje se podrobně ve faze7.part.js (tvar se ve fázi 7 změnil)
       const m = L.GEN.maze(lv); texts(m, 'maze' + lv);
-      const n = m.n; if (n !== [5, 6, 8, 10, 12][lv - 1]) bad('maze velikost');
-      let edges = 0;
-      for (let k = 0; k < n * n; k++) { const r = Math.floor(k / n), c = k % n;
-        if (m.cells[k] & 2) { edges++; if (c === n - 1 || !(m.cells[k + 1] & 8)) bad('maze stěna vpravo'); }
-        if (m.cells[k] & 4) { edges++; if (r === n - 1 || !(m.cells[k + n] & 1)) bad('maze stěna dole'); } }
-      if (edges !== n * n - 1) bad('maze není strom');
-      const ds = L.mazeBFS(n, m.cells, 0);
-      if (ds.some(x => x < 0)) bad('maze nedosažitelné');
-      if (lv >= 4) { if (m.key === null || m.key === 0 || m.key === n * n - 1) bad('maze klíč');
-        if (m.shortest !== ds[m.key] + L.mazeBFS(n, m.cells, n * n - 1)[m.key]) bad('maze nejkratší s klíčem'); }
-      else if (m.key !== null || m.shortest !== ds[n * n - 1]) bad('maze nejkratší');
     }
     for (let i = 0; i < 1500; i++) {
       // sudoku: řešení platné, viditelné hodnoty odpovídají, cíl jednoznačně odvoditelný, obtížnost podle úrovně
       const t = L.GEN.sudoku(lv); texts(t, 'sudoku' + lv); choice(t, 'sudoku' + lv);
-      const Nn = t.N; if (Nn !== (lv === 5 ? 6 : 4)) bad('sudoku velikost');
+      const Nn = t.N; if (Nn !== (lv === 5 ? 6 : 4)) bad('sudoku velikost');   // fáze 7: 6 × 6 od úrovně 5
       const syms = new Set(t.grid.flat().filter(Boolean).concat([t.ans]));
       if (syms.size > Nn) bad('sudoku symboly');
       if (t.grid[t.tr][t.tc] !== null) bad('sudoku cíl viditelný');
@@ -136,7 +125,7 @@ module.exports = function (L, bad, chk) {
   }
 
   // ---- maximum úrovní a postup ----
-  chk([L.maxLv('add', 'skolak'), L.maxLv('maze', 'skolak'), L.maxLv('m_gone', 'skolak'), L.maxLv('m_gone', 'predskolak'), L.maxLv('p_count', 'predskolak')], [5, 5, 5, 3, 3], 'maxLv');
+  chk([L.maxLv('add', 'skolak'), L.maxLv('maze', 'skolak'), L.maxLv('m_gone', 'skolak'), L.maxLv('m_gone', 'predskolak'), L.maxLv('p_count', 'predskolak')], [5, L.DYN_MAX, L.DYN_MAX, 3, 3], 'maxLv (fáze 7: bludiště a paměť školáka bez stropu)');
   const st = L.freshState(); st.profile = 'skolak';
   for (let i = 0; i < 40; i++) L.adapt(st, 'clock', true, 4, 2);
   chk(st.levels.clock, 5, 'školák až na úroveň 5');
@@ -156,7 +145,8 @@ module.exports = function (L, bad, chk) {
   chk(m6.adapt.add, { up: 3, down: 0 }, 'v6 adapt');
   chk(L.migrate(m6), m6, 'v6 idempotentní');
   chk(L.migrate({ ...m6, levels: { ...m6.levels, add: 5, maze: 4 } }).levels.add, 5, 'úroveň 5 zůstane');
-  chk(L.migrate({ ...m6, levels: { ...m6.levels, add: 9 } }).levels.add, 1, 'neplatná úroveň');
+  chk(L.migrate({ ...m6, levels: { ...m6.levels, add: 9 } }).levels.add, 5, 'úroveň nad maximem se omezí');
+  chk(L.migrate({ ...m6, levels: { ...m6.levels, add: 150 } }).levels.add, 1, 'neplatná úroveň');
   chk(L.migrate({ ver: 6, profile: 'predskolak', stars: 1, stickers: [], rounds: 1, levels: { p_color: 5, m_gone: 5 } }).levels.p_color, 3, 'předškolák omezen na 3');
   chk(L.decodeBackup(L.encodeBackup({ ...m6, levels: { ...m6.levels, sudoku: 4 } })).levels.sudoku, 4, 'záloha s úrovní 4');
 
