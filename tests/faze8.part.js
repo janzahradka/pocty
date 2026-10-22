@@ -17,6 +17,7 @@ module.exports = function (L, bad, chk) {
     if (!st || st.pos !== t.flag || st.got !== full(t)) bad(`${id} řešení nefunguje ${t.solution.join('')}`);
     if (L.robotSolve(t).length !== t.opt || t.opt !== t.solution.length) bad(`${id} délka`);
     if (lv === 1 && !t.solution.every(c => c === 'F')) bad(`${id} úroveň 1 jen rovně: ${t.solution.join('')}`);
+    if (t.solution.includes('B')) bad(`${id} řešení chodí dozadu`);
     if (lv === 2 && !t.solution.some(c => c === 'L' || c === 'R')) bad(`${id} úroveň 2 bez zatočení`);
     if (lv >= 3 && !t.board.includes('R')) bad(`${id} bez kamene`);
     if (t.prog !== (lv >= (prof === 'predskolak' ? 8 : 6))) bad(`${id} programování`);
@@ -30,8 +31,7 @@ module.exports = function (L, bad, chk) {
   chk(L.robotStep(T, { pos: 2, dir: 1, got: 0 }, 'J').ok, false, 'přes strom neskočí');
   chk(L.robotStep({ W: 3, H: 1, board: ['.', '.', '.'], treats: [] }, { pos: 0, dir: 1, got: 0 }, 'J').ok, false, 'skok jen přes kámen');
   chk(L.robotStep(T, { pos: 0, dir: 1, got: 0 }, 'L').st.dir, 0, 'otočení doleva');
-  chk(L.robotStep(T, { pos: 2, dir: 3, got: 0 }, 'B').ok, false, 'dozadu do stromu ne');
-  chk(L.robotStep(T, { pos: 0, dir: 1, got: 0 }, 'B').ok, false, 'dozadu mimo plochu ne');
+  // fáze 8b: robot nechodí dozadu, řešení nesmí obsahovat 'B'
   // obtížnost roste
   const avg = (lv, f) => { let s = 0; for (let i = 0; i < 30; i++) s += f(L.GEN.robot(lv, 'skolak')); return s / 30; };
   const o3 = avg(3, t => t.opt), o10 = avg(10, t => t.opt);
@@ -53,5 +53,5 @@ module.exports = function (L, bad, chk) {
   const m8 = L.migrate(JSON.parse(JSON.stringify(v7)));
   chk([m8.ver, m8.stars, m8.mazeSize, m8.levels.maze, m8.levels.sudoku, m8.levels.robot], [L.STATE_VER, 1500, 'XXL', 9, 8, 1], 'v7 → v8');
   chk(L.migrate(m8), m8, 'v8 idempotentní');
-  chk([L.VER[0], L.VER[1]], [9, '🚗'], 'verze 9 = autíčko');
+  chk(L.VERSIONS.find(v => v[0] === 9)[1], '🚗', 'verze 9 = autíčko');
 };

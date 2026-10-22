@@ -8,7 +8,7 @@ Předškolák: kolik jich je, barvy, tvary, velké a malé, kde to je, řady, co
 
 Úrovně: školák 1–5, předškolák 1–3; bez stropu: bludiště a robot (oba), sudoku a paměť a pozornost (školák). Logika (školák): bludiště, sudoku s obrázky, váhy, robot. Předškolák má bludiště a robota na úvodní obrazovce.
 
-Verze: loďka vlevo dole na úvodní obrazovce veze obrázek verze (🚗 autíčko = verze 9). Seznam je v `VERSIONS`, podrobnosti v rodičovské obrazovce.
+Verze: loďka vlevo dole na úvodní obrazovce veze obrázek verze (☀️ sluníčko = verze 10). Seznam je v `VERSIONS`, podrobnosti v rodičovské obrazovce.
 
 Jazyk: vlajky 🇨🇿 / 🇬🇧 kdykoli přepnou hru a přečtou celé zadání v daném jazyce. Další úloha stejného typu má krátké zadání.
 

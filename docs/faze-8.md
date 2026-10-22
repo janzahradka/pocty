@@ -5,8 +5,8 @@ Nová úloha pro oba profily: Marianka ji má v 🧩 logice, Rostík na úvodní
 
 | Prvek | Pravidlo |
 |---|---|
-| Ovládání | ⬆️ dopředu, ⬇️ dozadu (robot se neotočí), ↶ otočit doleva o 90°, ↷ otočit doprava o 90°, 🦘 přeskočit. Na klávesnici šipky, mezerník = skok, Enter = spustit program, Backspace = smazat příkaz. |
-| Do strany | Robot nikdy nejde do strany sám: musí se nejdřív otočit, pak jít dopředu. Směr ukazuje červený trojúhelník u robota. |
+| Ovládání (od verze 10) | Tlačítka rozložená jako šipky na klávesnici: nahoře skok přes kámen, dole dopředu, vlevo otočení doleva o 90°, vpravo otočení doprava o 90°. Dozadu robot nechodí, nahradí to otočení. Na klávesnici stejně (šipka nahoru = skok, dolů = dopředu), mezerník = skok, Enter = spustit program, Backspace = smazat příkaz. |
+| Do strany | Robot nikdy nejde do strany sám: musí se nejdřív otočit, pak jít dopředu. |
 | Překážky | 🪨 kámen se dá přeskočit (skok přes jedno políčko, jen přes kámen), 🌳 strom ne. Mimo plochu robot nejde. |
 | Náraz | „Bum! Tudy robot neprojde.“, robot zůstane stát, plocha se zatřese. |
 | Cíl | Dojít k 🏁 a cestou posbírat všechny 🍬. Když robot dojde k vlajce bez bonbonů: „Nejdřív posbírej všechny bonbony.“ |
@@ -30,6 +30,23 @@ Nová úloha pro oba profily: Marianka ji má v 🧩 logice, Rostík na úvodní
   - Na úrovni 1 je řešení jen „dopředu“, na úrovni 2 obsahuje otočení, od úrovně 3 skok.
   - Průměrná délka řešení: úroveň 3 ≈ 11 příkazů, úroveň 10 ≈ 18.
 
+## Úprava robota (verze 10 = ☀️ sluníčko)
+Podle vyzkoušení na tabletu:
+- Robot je nakreslený **shora jako postava**: hlava s hledím, ramena a ruce míří dopředu.
+  - Při otočení se celý plynule otočí, při kroku plynule přejede.
+  - Šipka u robota zmizela.
+  - Úhel se sčítá, takže se robot vždy točí kratší cestou.
+- Ikony tlačítek:
+  - dopředu: robot z profilu se zelenou šipkou vpřed,
+  - skok: robot z profilu a přerušovaný oblouk přes kámen,
+  - otočení: robot shora s obloukovou šipkou.
+- Zrušená chůze dozadu: solver ji nepoužívá a test hlídá, že žádné řešení neobsahuje krok dozadu.
+- Zadání: „Spodní tlačítko pošle robota dopředu. Do strany musí robot nejdřív zatočit. Horní tlačítko přeskočí kámen.“
+- Ověřeno v headless Chromiu:
+  - otočení celé postavy, rozložení tlačítek (nahoře skok, dole dopředu, po stranách otočení), žádné tlačítko dozadu, ovládání klávesnicí,
+  - celá kola robota včetně programování,
+  - tablet i telefon.
+
 ## Bludiště v desítkách políček
 | Velikost | Rozměr (na šířku) | Bludišť v kole |
 |---|---|---|
@@ -46,7 +63,7 @@ Nová úloha pro oba profily: Marianka ji má v 🧩 logice, Rostík na úvodní
 
 ## Stav a verze
 - `STATE_VER` 8. Přibyl typ `robot` (úroveň 1) a velikost `XXL`. Ostatní beze změny.
-- Verze na loďce: 9 = 🚗 autíčko. Cache `pocty-v9`.
+- Verze na loďce: 9 = 🚗 autíčko, 10 = ☀️ sluníčko (úprava robota). Cache `pocty-v10`.
 
 ## Ověření
 - `node tests/gen.test.js` (+ `tests/faze8.part.js`):

@@ -254,14 +254,22 @@ body.pre .answers.big .ans{height:clamp(130px,30vh,260px)}
 .rboard{display:grid;background:#cfe9b8;border:4px solid #6b8f4e;border-radius:14px;padding:3px;gap:2px}
 .rc{background:#e6f5d6;border-radius:6px;display:grid;place-items:center;line-height:1;position:relative}
 .rc.flag{background:#fff3c4}
-.rc .rdir{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
-.rc .rdir i{position:absolute;top:-2%;left:50%;transform:translateX(-50%);font-style:normal;font-size:.42em;color:#e0446a;text-shadow:0 0 3px #fff}
-.rc.bump{animation:shake .4s}
-.rctl{display:flex;gap:clamp(8px,1.6vw,18px);justify-content:center;flex-wrap:wrap}
-.rctl button{width:clamp(64px,10vh,96px);height:clamp(64px,10vh,96px);border-radius:22px;background:#fff;box-shadow:var(--shadow);font-size:clamp(34px,6vh,54px);line-height:1;display:grid;place-items:center}
+.rboard{position:relative}
+.rbot{position:absolute;left:0;top:0;transition:transform .28s ease;pointer-events:none;z-index:2}
+.rbot .rot{width:100%;height:100%;transition:transform .28s ease}
+.rbot .rot svg{width:100%;height:100%;display:block;filter:drop-shadow(0 3px 2px rgba(0,0,0,.25))}
+.rbot .shk.bump{animation:shake .4s}
+.rctl{display:flex;gap:clamp(14px,3vw,40px);justify-content:center;align-items:center;flex-wrap:wrap}
+.rpad{display:grid;grid-template-columns:repeat(3,var(--rb));grid-template-rows:repeat(2,var(--rb));gap:8px;grid-template-areas:". u ." "l d r"}
+.rside{display:grid;grid-template-columns:repeat(2,var(--rb));gap:8px}
+.rctl{--rb:clamp(64px,10.5vh,100px)}
+.rctl button{width:var(--rb);height:var(--rb);border-radius:20px;background:#fff;box-shadow:var(--shadow);display:grid;place-items:center;padding:4px}
+.rctl button svg{width:92%;height:92%}
 .rctl button:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(43,35,80,.18)}
-.rctl .run{background:var(--green);color:#fff}
-.rctl .del{background:#ffe0e0}
+.rctl .u{grid-area:u;background:#e3f1ff} .rctl .d{grid-area:d;background:#e4f7e9} .rctl .l{grid-area:l} .rctl .r{grid-area:r}
+.rctl .run{background:var(--green)}
+.rctl .del{background:#ffe0e0;font-size:calc(var(--rb)*.45)}
+.rq svg{width:clamp(26px,4vh,36px);height:clamp(26px,4vh,36px);vertical-align:middle}
 .rq{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;min-height:44px;max-width:min(1000px,96vw);background:rgba(255,255,255,.75);border-radius:14px;padding:4px 10px;font-size:clamp(22px,3.6vh,32px);line-height:1.2}
 .rq span.cur{background:var(--yellow);border-radius:6px}
 .rq span.err{background:#ffb3b3;border-radius:6px}
@@ -1428,7 +1436,7 @@ function scaleWeights(eqs){
 // ---------- Robot: jen dopředu, dozadu, otočit, přeskočit; dojít k vlajce a posbírat bonbony ----------
 // board: '.' volno, 'R' kámen (dá se přeskočit), 'T' strom (nedá se přeskočit). Směr 0 nahoru, 1 vpravo, 2 dolů, 3 vlevo.
 const RDIR = [[-1,0],[0,1],[1,0],[0,-1]];
-const RCMDS = ['F','B','L','R','J'];                 // dopředu, dozadu, doleva, doprava, skok
+const RCMDS = ['F','L','R','J'];                     // dopředu, otočit doleva, otočit doprava, skok (dozadu se nechodí: nahradí ho otočení)
 function robotStep(t, st, cmd){
   const { W, H, board } = t, r = Math.floor(st.pos / W), c = st.pos % W;
   const cell = (rr, cc) => rr < 0 || rr >= H || cc < 0 || cc >= W ? 'X' : board[rr * W + cc];
@@ -1488,8 +1496,8 @@ function genRobot(lv, prof){
     if (!sol || sol.length > maxLen || sol.length < Math.min(lv + 1, 6)) continue;
     if (lv >= 3 && !sol.includes('J') && guard < 300) continue;             // od úrovně 3 se má přeskakovat
     t.opt = sol.length; t.solution = sol;
-    t.speech = 'Dovedeš robota k vlajce? Šipka nahoru jde dopředu, šipka dolů dozadu. Do strany musí robot nejdřív zatočit.'
-      + (lv >= 3 ? ' Přes kámen umí přeskočit.' : '') + (nT ? ` Cestou posbírej ${nT === 1 ? 'bonbon' : 'všechny bonbony'}.` : '')
+    t.speech = 'Dovedeš robota k vlajce? Spodní tlačítko pošle robota dopředu. Do strany musí robot nejdřív zatočit.'
+      + (lv >= 3 ? ' Horní tlačítko přeskočí kámen.' : '') + (nT ? ` Cestou posbírej ${nT === 1 ? 'bonbon' : 'všechny bonbony'}.` : '')
       + (prog ? ' Nejdřív naskládej všechny příkazy, potom zmáčkni zelené tlačítko a robot je provede.' : '');
     t.okSay = pick(['Ano! Robot je u vlajky.', 'Výborně, robot došel do cíle!', 'Paráda, robot to zvládl!']);
     return t;
@@ -1592,7 +1600,8 @@ const STICKERS = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨'
 const VERSIONS = [
   [7, '🦓', 'zebra', 'zebru', 'a zebra', '2026-10-22', 'fáze 6: úrovně 4–5, logika (bludiště, sudoku, váhy)'],
   [8, '🐍', 'had', 'hada', 'a snake', '2026-10-22', 'fáze 7: úrovně bez stropu, těžší bludiště s výběrem velikosti, opravené váhy'],
-  [9, '🚗', 'autíčko', 'autíčko', 'a car', '2026-10-22', 'fáze 8: robot, bludiště v desítkách políček s posouváním']
+  [9, '🚗', 'autíčko', 'autíčko', 'a car', '2026-10-22', 'fáze 8: robot, bludiště v desítkách políček s posouváním'],
+  [10, '☀️', 'sluníčko', 'sluníčko', 'a sun', '2026-10-22', 'robot shora jako postava, ovládání jako šipky (nahoru skok, dolů dopředu, do stran otočení), bez chůze dozadu']
 ];
 const VER = VERSIONS[VERSIONS.length - 1];
 
@@ -1796,8 +1805,8 @@ function textEN(t){
     E.short = 'Can you take the mouse to the cheese?'; E.ok = ['Yes! The mouse found the cheese.', 'Well done, the mouse is at the cheese!', 'Great, you found the way!'][t.W % 3];
   } else if (o === 'robot'){
     const n = t.treats.length;
-    E.full = "Can you take the robot to the flag? The up arrow goes forward, the down arrow goes back. To go sideways, the robot must turn first."
-      + (t.lv >= 3 ? ' The robot can jump over a rock.' : '') + (n ? ` Collect ${n === 1 ? 'the sweet' : 'all the sweets'} on the way.` : '')
+    E.full = 'Can you take the robot to the flag? The bottom button moves the robot forward. To go sideways, the robot must turn first.'
+      + (t.lv >= 3 ? ' The top button jumps over a rock.' : '') + (n ? ` Collect ${n === 1 ? 'the sweet' : 'all the sweets'} on the way.` : '')
       + (t.prog ? ' First put all the commands in a row, then press the green button and the robot will do them.' : '');
     E.short = t.prog ? 'Program the robot to reach the flag.' : n ? 'Collect the sweets and go to the flag.' : 'Take the robot to the flag.';
     E.ok = ['Yes! The robot is at the flag.', 'Well done, the robot made it!', 'Great, the robot did it!'][t.opt % 3];
@@ -2728,28 +2737,75 @@ function renderScales(t, p){
 }
 
 // ===================== fáze 8: robot =====================
-const RICON = { F:'⬆️', B:'⬇️', L:'↶', R:'↷', J:'🦘' };
+// Robot shora (hlava a ruce míří dopředu = nahoru; otáčí se celé tělo)
+const ROBOT_TOP = `<svg viewBox="-50 -50 100 100" xmlns="http://www.w3.org/2000/svg">
+<rect x="-45" y="-30" width="14" height="38" rx="7" fill="#7f9db3" stroke="#3f5868" stroke-width="3"/><rect x="31" y="-30" width="14" height="38" rx="7" fill="#7f9db3" stroke="#3f5868" stroke-width="3"/>
+<circle cx="-38" cy="-32" r="7" fill="#e8a33a" stroke="#3f5868" stroke-width="2.5"/><circle cx="38" cy="-32" r="7" fill="#e8a33a" stroke="#3f5868" stroke-width="2.5"/>
+<rect x="-33" y="-16" width="66" height="40" rx="15" fill="#a9c4d6" stroke="#3f5868" stroke-width="3"/>
+<rect x="-14" y="14" width="28" height="14" rx="5" fill="#7f9db3" stroke="#3f5868" stroke-width="2.5"/>
+<circle cx="0" cy="-4" r="19" fill="#e3eef5" stroke="#3f5868" stroke-width="3"/>
+<path d="M-15 -14 A19 19 0 0 1 15 -14 L11 -9 A14 14 0 0 0 -11 -9 Z" fill="#22303a"/>
+<circle cx="-6" cy="-14" r="2.6" fill="#6ff"/><circle cx="6" cy="-14" r="2.6" fill="#6ff"/>
+<circle cx="0" cy="0" r="4.5" fill="#e0446a" stroke="#3f5868" stroke-width="2"/></svg>`;
+// Robot z profilu (dívá se doprava) se šipkou dopředu nebo dozadu
+function robotSide(back){
+  const arrow = back === null ? '' : back ? '<path d="M38 52 H8 M18 40 L6 52 L18 64" stroke="#e8792f" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+                     : '<path d="M86 52 H114 M104 40 L116 52 L104 64" stroke="#22b56a" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+  return `<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">${arrow}
+<line x1="58" y1="14" x2="58" y2="5" stroke="#3f5868" stroke-width="3"/><circle cx="58" cy="5" r="4" fill="#e0446a"/>
+<rect x="50" y="72" width="10" height="22" rx="4" fill="#7f9db3" stroke="#3f5868" stroke-width="2.5"/><rect x="47" y="90" width="20" height="7" rx="3" fill="#3f5868"/>
+<rect x="44" y="40" width="30" height="35" rx="8" fill="#a9c4d6" stroke="#3f5868" stroke-width="3"/>
+<rect x="44" y="14" width="30" height="25" rx="8" fill="#e3eef5" stroke="#3f5868" stroke-width="3"/>
+<rect x="62" y="20" width="14" height="10" rx="4" fill="#22303a"/><circle cx="71" cy="25" r="2.6" fill="#6ff"/>
+<rect x="52" y="46" width="26" height="9" rx="4.5" fill="#7f9db3" stroke="#3f5868" stroke-width="2.5"/><circle cx="80" cy="50.5" r="5" fill="#e8a33a" stroke="#3f5868" stroke-width="2"/></svg>`;
+}
+// Otočení: malý robot shora a oblouková šipka
+function robotTurn(left){
+  const arc = left ? 'M30 -36 A44 44 0 0 0 -40 -8' : 'M-30 -36 A44 44 0 0 1 40 -8';
+  const head = left ? 'M-50 -16 L-40 -4 L-30 -16' : 'M50 -16 L40 -4 L30 -16';
+  return `<svg viewBox="-56 -56 112 112" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0 10) scale(.62)">${ROBOT_TOP.replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g>
+<path d="${arc}" stroke="#7b5cff" stroke-width="8" fill="none" stroke-linecap="round"/><path d="${head}" stroke="#7b5cff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+const ROBOT_JUMP = `<svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg"><path d="M66 96 Q64 76 80 72 Q98 70 96 96 Z" fill="#9a9a9a" stroke="#5c5c5c" stroke-width="3"/>
+<path d="M30 46 Q82 -8 114 70" stroke="#2f9bff" stroke-width="7" fill="none" stroke-linecap="round" stroke-dasharray="1 11"/><path d="M100 64 L114 74 L118 56" stroke="#2f9bff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<g transform="translate(-18 14) scale(.62)">${robotSide(null).replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g></svg>`;
+const RICON = { F: robotSide(false), L: robotTurn(true), R: robotTurn(false), J: ROBOT_JUMP };
 function renderRobot(t, p){
   p.className = 'stack';
-  const W = t.W, H = t.H, ctrlH = t.prog ? 230 : 140;
-  const sz = Math.floor(Math.min(Math.min(VW(), 1100) * .94 / W, (VH() - 150 - ctrlH) / H));
+  const W = t.W, H = t.H, ctrlH = 2 * Math.min(100, Math.max(64, VH() * .105)) + 30 + (t.prog ? 60 : 0);
+  const sz = Math.floor(Math.min(Math.min(VW(), 1100) * .94 / W, (VH() - 140 - ctrlH) / H));
   const board = el('div', 'rboard'); board.style.gridTemplateColumns = `repeat(${W}, ${sz}px)`; board.style.gridAutoRows = sz + 'px'; board.style.fontSize = Math.floor(sz * .66) + 'px';
-  t.st = { pos:t.from, dir:t.dir0, got:0 }; t.bumps = 0; t.moves = 0; t.queue = []; t.running = false; t.failed = false;
+  t.st = { pos:t.from, dir:t.dir0, got:0 }; t.angle = t.dir0 * 90; t.bumps = 0; t.moves = 0; t.queue = []; t.running = false; t.failed = false; t.sz = sz;
   t.cellEls = t.board.map(() => { const c = el('div', 'rc'); board.appendChild(c); return c; });
+  // robot jako samostatná vrstva: přesun (translate) a otočení celého těla (rotate) se plynule animují
+  const bot = el('div', 'rbot'), rot = el('div', 'rot'), shk = el('div', 'shk');
+  bot.style.width = bot.style.height = sz + 'px'; shk.style.width = shk.style.height = '100%';
+  rot.innerHTML = ROBOT_TOP; shk.appendChild(rot); bot.appendChild(shk); board.appendChild(bot);
+  t.botEl = bot; t.rotEl = rot; t.shkEl = shk;
   p.appendChild(board);
   if (t.prog){ t.qEl = el('div', 'rq'); p.appendChild(t.qEl); }
-  const ctl = el('div', 'rctl');
-  const btn = (txt, cls, fn, label) => { const b = el('button', cls, txt); b.setAttribute('aria-label', label); b.addEventListener('click', fn); ctl.appendChild(b); return b; };
-  btn('↶', '', () => robotCmd(t, 'L'), 'doleva'); btn('⬆️', '', () => robotCmd(t, 'F'), 'dopředu'); btn('↷', '', () => robotCmd(t, 'R'), 'doprava');
-  btn('⬇️', '', () => robotCmd(t, 'B'), 'dozadu'); btn('🦘', '', () => robotCmd(t, 'J'), 'skok');
-  if (t.prog){ btn('⌫', 'del', () => { if (t.running || !t.queue.length) return; t.queue.pop(); sfx('tap'); robotQueue(t); }, 'smazat'); btn('▶️', 'run', () => robotRun(t), 'spustit'); }
+  // ovládání jako šipky na klávesnici: nahoře skok, dole dopředu, vlevo a vpravo otočení
+  const ctl = el('div', 'rctl'), pad = el('div', 'rpad'), side = el('div', 'rside');
+  const btn = (box, cmd, cls, html, label, fn) => { const b = el('button', cls); b.innerHTML = html; b.setAttribute('aria-label', label); b.addEventListener('click', fn || (() => robotCmd(t, cmd))); box.appendChild(b); return b; };
+  btn(pad, 'J', 'u', RICON.J, 'skok'); btn(pad, 'L', 'l', RICON.L, 'doleva'); btn(pad, 'F', 'd', RICON.F, 'dopředu'); btn(pad, 'R', 'r', RICON.R, 'doprava');
+  if (t.prog){
+    btn(side, null, 'del', '⌫', 'smazat', () => { if (t.running || !t.queue.length) return; t.queue.pop(); sfx('tap'); robotQueue(t); });
+    btn(side, null, 'run', '<svg viewBox="0 0 100 100"><path d="M30 18 L84 50 L30 82 Z" fill="#fff"/></svg>', 'spustit', () => robotRun(t));
+  }
+  ctl.append(pad); if (t.prog) ctl.append(side);
   p.appendChild(ctl);
-  robotPaint(t); if (t.prog) robotQueue(t);
+  robotPaint(t); robotPlace(t, true); if (t.prog) robotQueue(t);
+}
+function robotPlace(t, instant){
+  const r = Math.floor(t.st.pos / t.W), c = t.st.pos % t.W, off = 3;                 // okraj plochy 3 px, mezera 2 px
+  if (instant){ t.botEl.style.transition = 'none'; t.rotEl.style.transition = 'none'; }
+  t.botEl.style.transform = `translate(${off + c * (t.sz + 2)}px, ${off + r * (t.sz + 2)}px)`;
+  t.rotEl.style.transform = `rotate(${t.angle}deg)`;
+  if (instant) requestAnimationFrame(() => { t.botEl.style.transition = ''; t.rotEl.style.transition = ''; });
 }
 function robotPaint(t){
   t.cellEls.forEach((c, i) => {
-    c.innerHTML = ''; c.classList.toggle('flag', i === t.flag);
-    if (i === t.st.pos){ c.textContent = '🤖'; const d = el('span', 'rdir'); d.style.transform = `rotate(${t.st.dir * 90}deg)`; d.appendChild(el('i', '', '▲')); c.appendChild(d); return; }
+    c.classList.toggle('flag', i === t.flag);
     const ti = t.treats.indexOf(i);
     c.textContent = i === t.flag ? '🏁' : ti >= 0 && !(t.st.got & (1 << ti)) ? '🍬' : t.board[i] === 'T' ? '🌳' : t.board[i] === 'R' ? '🪨' : '';
   });
@@ -2757,15 +2813,16 @@ function robotPaint(t){
 function robotQueue(t, cur = -1, err = -1){
   t.qEl.innerHTML = '';
   if (!t.queue.length){ t.qEl.appendChild(el('span', '', '…')); return; }
-  t.queue.forEach((c, k) => t.qEl.appendChild(el('span', k === err ? 'err' : k === cur ? 'cur' : '', RICON[c])));
+  t.queue.forEach((c, k) => { const sp = el('span', k === err ? 'err' : k === cur ? 'cur' : ''); sp.innerHTML = RICON[c]; t.qEl.appendChild(sp); });
 }
 const robotFull = t => t.st.got === (1 << t.treats.length) - 1;
 function robotStepUI(t, cmd){                   // jeden krok; vrací false při nárazu
   const before = t.st.got, r = robotStep(t, t.st, cmd);
-  if (!r.ok){ t.bumps++; sfx('bad'); const c = t.cellEls[t.st.pos]; c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); return false; }
+  if (!r.ok){ t.bumps++; sfx('bad'); const k = t.shkEl; k.classList.remove('bump'); void k.offsetWidth; k.classList.add('bump'); return false; }
+  if (cmd === 'L') t.angle -= 90; else if (cmd === 'R') t.angle += 90;                // úhel se sčítá, aby se robot točil kratší cestou
   t.st = r.st; t.moves++;
   sfx(r.st.got !== before ? 'pair' : cmd === 'J' ? 'ok' : 'flip');
-  robotPaint(t);
+  robotPaint(t); robotPlace(t);
   return true;
 }
 function robotDone(t){
@@ -2784,7 +2841,7 @@ function robotRun(t){
   actx();
   if (!t.queue.length) return say(Lx().progEmpty);
   t.running = true; sfx('tap');
-  const reset = msg => { t.failed = true; say(msg); setTimeout(() => { if (!alive(t)) return; t.st = { pos:t.from, dir:t.dir0, got:0 }; t.running = false; robotPaint(t); robotQueue(t); }, 1400); };
+  const reset = msg => { t.failed = true; say(msg); setTimeout(() => { if (!alive(t)) return; t.st = { pos:t.from, dir:t.dir0, got:0 }; t.angle = t.dir0 * 90; t.running = false; robotPaint(t); robotPlace(t); robotQueue(t); }, 1400); };
   let k = 0;
   const step = () => {
     if (!alive(t)) return;
@@ -2796,9 +2853,9 @@ function robotRun(t){
   };
   setTimeout(step, 250);
 }
-document.addEventListener('keydown', e => {      // klávesnice u robota: šipky, mezerník = skok, Enter = spustit, Backspace = smazat
+document.addEventListener('keydown', e => {      // klávesnice jako tlačítka: šipka nahoru = skok, dolů = dopředu, vlevo/vpravo = otočení, Enter = spustit, Backspace = smazat
   if (!task || task.op !== 'robot' || $('#game').hidden) return;
-  const m = { ArrowUp:'F', ArrowDown:'B', ArrowLeft:'L', ArrowRight:'R', ' ':'J' }[e.key];
+  const m = { ArrowUp:'J', ArrowDown:'F', ArrowLeft:'L', ArrowRight:'R', ' ':'J' }[e.key];
   if (m){ e.preventDefault(); robotCmd(task, m); }
   else if (e.key === 'Enter' && task.prog){ e.preventDefault(); robotRun(task); }
   else if (e.key === 'Backspace' && task.prog && !task.running && task.queue.length){ e.preventDefault(); task.queue.pop(); robotQueue(task); }
