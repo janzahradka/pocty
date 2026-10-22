@@ -22,7 +22,7 @@ for (const op of L.OPS) for (const lv of [1, 2, 3]) for (let i = 0; i < 4000; i+
 
 // ---- společné vlastnosti všech typů ----
 const ex = {};
-for (const op of L.KINDS) for (const lv of [1, 2, 3]) {
+for (const op of L.SCHOOL_KINDS) for (const lv of [1, 2, 3]) {
   const seen = new Set();
   for (let i = 0; i < 4000; i++) {
     const t = L.GEN[op](lv);
@@ -135,7 +135,7 @@ const m = L.migrate(JSON.parse(JSON.stringify(v1)));
 chk(m.stars, 57, 'migrace hvězdy'); chk(m.stickers, v1.stickers, 'migrace samolepky'); chk(m.rounds, 6, 'migrace kola');
 chk([m.levels.add, m.levels.sub, m.levels.mul, m.levels.div], [3, 2, 3, 1], 'migrace úrovně');
 chk([m.levels.cmp, m.levels.shape, m.levels.pos, m.levels.seq, m.levels.clock, m.levels.money, m.levels.sym], [1, 1, 1, 1, 1, 1, 1], 'nové úrovně');
-chk(m.adapt.sub, { up: 0, down: 1 }, 'migrace adapt'); chk(m.ver, 3, 'verze');
+chk(m.adapt.sub, { up: 0, down: 1 }, 'migrace adapt'); chk(m.ver, L.STATE_VER, 'verze'); chk(m.profile, 'skolak', 'v1 → školák');
 chk(L.migrate(m), m, 'migrace je idempotentní');
 chk(L.migrate({ stars: 3, stickers: ['🐶'], budouci: { x: 1 } }).budouci, { x: 1 }, 'neznámé položky zůstanou');
 chk(L.migrate(null).stars, 0, 'prázdný stav');
@@ -157,8 +157,10 @@ const m2 = L.migrate(JSON.parse(JSON.stringify(v2)));
 chk([m2.stars, m2.rounds, m2.stickers], [187, 19, v2.stickers], 'migrace v2 úspěchy');
 chk(['add','sub','mul','div','cmp','shape','pos','seq'].map(k => m2.levels[k]), [3,2,3,1,3,2,3,1], 'migrace v2 úrovně');
 chk([m2.levels.clock, m2.levels.money, m2.levels.sym], [1,1,1], 'nové úrovně v3');
-chk(m2.adapt.seq, {up:3, down:0}, 'migrace v2 adapt'); chk(m2.ver, 3, 'verze 3');
+chk(m2.adapt.seq, {up:3, down:0}, 'migrace v2 adapt'); chk(m2.ver, L.STATE_VER, 'verze'); chk(m2.profile, 'skolak', 'v2 → školák');
 chk(L.decodeBackup(L.encodeBackup(v2)).stars, 187, 'záloha z v2 jde obnovit');
+
+require('./faze4.part.js')(L, bad, chk);
 
 console.log(fails ? `\n${fails} CHYB` : '\nVše OK');
 process.exit(fails ? 1 : 0);
