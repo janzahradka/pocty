@@ -238,7 +238,8 @@ body.pre .answers.big .ans{height:clamp(130px,30vh,260px)}
 @media (max-width:640px){#tiles-skolak{grid-template-columns:repeat(3,1fr)}}
 .t-logic{background:#d9485f}
 #logic{align-items:center;justify-content:center;gap:clamp(14px,3vh,30px);text-align:center;overflow:auto}
-.tiles.logic{grid-template-columns:repeat(3,minmax(0,1fr));width:min(820px,100%)}
+.tiles.logic{grid-template-columns:repeat(4,minmax(0,1fr));width:min(1000px,100%)}
+@media (max-width:640px){.tiles.logic{grid-template-columns:repeat(2,1fr)}}
 .maze{display:grid;border-right:4px solid var(--ink);border-bottom:4px solid var(--ink);background:#fffaf0;border-radius:4px}
 .mc{border-top:4px solid transparent;border-left:4px solid transparent;display:grid;place-items:center;line-height:1;cursor:pointer;position:relative}
 .mc.wt{border-top-color:var(--ink)} .mc.wl{border-left-color:var(--ink)}
@@ -249,13 +250,28 @@ body.pre .answers.big .ans{height:clamp(130px,30vh,260px)}
 .mc.fog.lock{filter:none;opacity:1}
 .keys{font-size:clamp(22px,4vh,34px);min-height:1.2em;letter-spacing:4px}
 .keys .got{filter:none} .keys .no{filter:grayscale(1);opacity:.35}
+/* robot */
+.rboard{display:grid;background:#cfe9b8;border:4px solid #6b8f4e;border-radius:14px;padding:3px;gap:2px}
+.rc{background:#e6f5d6;border-radius:6px;display:grid;place-items:center;line-height:1;position:relative}
+.rc.flag{background:#fff3c4}
+.rc .rdir{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
+.rc .rdir i{position:absolute;top:-2%;left:50%;transform:translateX(-50%);font-style:normal;font-size:.42em;color:#e0446a;text-shadow:0 0 3px #fff}
+.rc.bump{animation:shake .4s}
+.rctl{display:flex;gap:clamp(8px,1.6vw,18px);justify-content:center;flex-wrap:wrap}
+.rctl button{width:clamp(64px,10vh,96px);height:clamp(64px,10vh,96px);border-radius:22px;background:#fff;box-shadow:var(--shadow);font-size:clamp(34px,6vh,54px);line-height:1;display:grid;place-items:center}
+.rctl button:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(43,35,80,.18)}
+.rctl .run{background:var(--green);color:#fff}
+.rctl .del{background:#ffe0e0}
+.rq{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;min-height:44px;max-width:min(1000px,96vw);background:rgba(255,255,255,.75);border-radius:14px;padding:4px 10px;font-size:clamp(22px,3.6vh,32px);line-height:1.2}
+.rq span.cur{background:var(--yellow);border-radius:6px}
+.rq span.err{background:#ffb3b3;border-radius:6px}
+.mazewrap{max-width:96vw;overflow:auto;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;border-radius:6px}
 #mazesize{align-items:center;justify-content:center;gap:clamp(14px,3vh,30px);text-align:center;overflow:auto}
-.sizes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,2vw,24px);width:min(1000px,100%)}
-@media (max-width:640px),(orientation:portrait) and (max-width:900px){.sizes{grid-template-columns:repeat(2,1fr)}}
+.sizes{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(10px,2vw,24px);width:min(1150px,100%)}
+@media (max-width:640px),(orientation:portrait) and (max-width:900px){.sizes{grid-template-columns:repeat(3,1fr)}}
 .sizes button{border-radius:26px;background:#fff;box-shadow:var(--shadow);padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .sizes button.on{outline:5px solid var(--orange)}
-.sizes .mini{display:grid;gap:2px;background:var(--ink);padding:3px;border-radius:6px}
-.sizes .mini i{background:#fffaf0;width:var(--m);height:var(--m)}
+.sizes .mini{border:3px solid var(--ink);border-radius:6px;background-color:#fffaf0;background-image:linear-gradient(var(--ink) 1px,transparent 1px),linear-gradient(90deg,var(--ink) 1px,transparent 1px)}
 .sizes b{font-size:clamp(20px,3vw,30px)} .sizes small{font-size:clamp(14px,2vw,20px);color:var(--muted);font-weight:700}
 .pan .x{font-size:.7em;color:var(--muted);font-weight:800;margin:0 2px}
 .pan .ghost{opacity:.45}
@@ -328,6 +344,7 @@ body.pre .answers.big .ans{height:clamp(130px,30vh,260px)}
     <button class="tile" style="background:#13b5b1" data-mode="p_odd"><b class="sm">🐶🐱🚗</b><small data-en="odd one out">co nepatří?</small><span class="lv" data-lv="p_odd"></span></button>
     <button class="tile" style="background:#ff5fa8" data-mode="p_pair"><b class="sm">🐰🥕</b><small data-en="pairs">dvojice</small><span class="lv" data-lv="p_pair"></span></button>
     <button class="tile" style="background:#22b56a" data-mode="maze"><b class="sm">🐭🧀</b><small data-en="maze">bludiště</small><span class="lv" data-lv="maze"></span></button>
+    <button class="tile" style="background:#4a7bd8" data-mode="robot"><b class="sm">🤖🏁</b><small data-en="robot">robot</small><span class="lv" data-lv="robot"></span></button>
     <button class="tile" style="background:#7b5cff" data-mode="p_digit" id="t-digit"><b>123</b><small data-en="numbers">číslice</small><span class="lv" data-lv="p_digit"></span></button>
     <button class="tile t-brain to-brain"><b class="sm">🧠</b><small data-en="memory">paměť</small><span class="lv"></span></button>
     <button class="tile t-mix" data-mode="mix"><b>🎲</b><small data-en="everything">všechno</small><span class="lv"></span></button>
@@ -366,6 +383,7 @@ body.pre .answers.big .ans{height:clamp(130px,30vh,260px)}
     <button class="tile" style="background:#22b56a" data-mode="maze"><b class="sm">🐭🧀</b><small data-en="maze">bludiště</small><span class="lv" data-lv="maze"></span></button>
     <button class="tile" style="background:#7b5cff" data-mode="sudoku"><b class="sm">🍎🍌🍇</b><small data-en="sudoku">sudoku</small><span class="lv" data-lv="sudoku"></span></button>
     <button class="tile" style="background:#e0702a" data-mode="scales"><b class="sm">⚖️</b><small data-en="scales">váhy</small><span class="lv" data-lv="scales"></span></button>
+    <button class="tile" style="background:#4a7bd8" data-mode="robot"><b class="sm">🤖🏁</b><small data-en="robot">robot</small><span class="lv" data-lv="robot"></span></button>
   </div>
   <button class="btn wide" id="l-home" data-en="🏠 Home">🏠 Domů</button>
 </section>
@@ -456,13 +474,13 @@ const SCHOOL_KINDS = ['add','sub','mul','div','cmp','shape','pos','seq','clock',
 const PRE_KINDS = ['p_count','p_color','p_shape','p_size','p_pos','p_seq','p_odd','p_pair','p_digit'];   // + bludiště (fáze 7, sdílí typ 'maze')
 const BRAIN = ['m_gone','m_pairs','m_simon','a_find','a_diff','a_same'];      // paměť a pozornost, oba profily
 const BRAIN_MIX = BRAIN.filter(k => k !== 'm_pairs');                        // pexeso je celé kolo, do mixu nepatří
-const LOGIC = ['maze','sudoku','scales'];                                    // logika (školák), fáze 6
+const LOGIC = ['maze','sudoku','scales','robot'];                            // logika (školák), fáze 6; robot fáze 8
 const KINDS = [...SCHOOL_KINDS, ...PRE_KINDS, ...BRAIN, ...LOGIC];            // nové typy jen na konec
 // Nejvyšší úroveň: školák 5 (počty, logika i paměť), předškolák 3
 // Úlohy bez stropu (fáze 7): obtížnost roste dál s každým postupem. Bludiště pro oba profily, ostatní jen školák.
 const DYN_MAX = 99;
 const DYN_SCHOOL = ['sudoku','m_gone','m_pairs','m_simon','a_find','a_diff','a_same'];
-const isDyn = (kind, prof) => kind === 'maze' || (prof !== 'predskolak' && DYN_SCHOOL.includes(kind));
+const isDyn = (kind, prof) => kind === 'maze' || kind === 'robot' || (prof !== 'predskolak' && DYN_SCHOOL.includes(kind));
 const maxLv = (kind, prof) => isDyn(kind, prof) ? DYN_MAX : PRE_KINDS.includes(kind) ? 3 : BRAIN.includes(kind) ? (prof === 'predskolak' ? 3 : 5) : 5;
 const SIGN = {add:'+', sub:'−', mul:'·', div:':'};
 const WORD = {add:'plus', sub:'minus', mul:'krát'};
@@ -1270,8 +1288,10 @@ function genSame(lv, prof){
 // ---------- Bludiště: myška k sýru, na úrovních 4–5 nejdřív klíč ----------
 // cells[i]: otevřené strany 1 = nahoru, 2 = vpravo, 4 = dolů, 8 = vlevo
 const MZ = [[1,-1,0,4],[2,0,1,8],[4,1,0,1],[8,0,-1,2]];      // [bit, dr, dc, opačný bit]
-const MAZE_SIZES = { S:[8,6], M:[12,8], L:[16,11], XL:[22,15] };   // sloupce × řádky na šířku (na výšku otočené)
-const MAZE_SIZE_N = { S:['malé','small'], M:['střední','medium'], L:['velké','big'], XL:['obří','giant'] };
+// sloupce × řádky na šířku (na výšku otočené); velká bludiště se na obrazovce posouvají (fáze 8)
+const MAZE_SIZES = { S:[8,6], M:[16,12], L:[24,18], XL:[36,26], XXL:[50,36] };
+const MAZE_SIZE_N = { S:['malé','small'], M:['střední','medium'], L:['velké','big'], XL:['obří','giant'], XXL:['gigantické','huge'] };
+const MAZE_ROUND = { S:5, M:5, L:3, XL:2, XXL:1 };                 // počet bludišť v kole podle velikosti
 function mazeBFS(W, H, cells, from){
   const dist = Array(W * H).fill(-1), q = [from]; dist[from] = 0;
   for (let h = 0; h < q.length; h++){ const i = q[h], r = Math.floor(i / W), c = i % W;
@@ -1404,6 +1424,78 @@ function scaleWeights(eqs){
   return W;
 }
 
+
+// ---------- Robot: jen dopředu, dozadu, otočit, přeskočit; dojít k vlajce a posbírat bonbony ----------
+// board: '.' volno, 'R' kámen (dá se přeskočit), 'T' strom (nedá se přeskočit). Směr 0 nahoru, 1 vpravo, 2 dolů, 3 vlevo.
+const RDIR = [[-1,0],[0,1],[1,0],[0,-1]];
+const RCMDS = ['F','B','L','R','J'];                 // dopředu, dozadu, doleva, doprava, skok
+function robotStep(t, st, cmd){
+  const { W, H, board } = t, r = Math.floor(st.pos / W), c = st.pos % W;
+  const cell = (rr, cc) => rr < 0 || rr >= H || cc < 0 || cc >= W ? 'X' : board[rr * W + cc];
+  if (cmd === 'L') return { ok:true, st:{ pos:st.pos, dir:(st.dir + 3) % 4, got:st.got } };
+  if (cmd === 'R') return { ok:true, st:{ pos:st.pos, dir:(st.dir + 1) % 4, got:st.got } };
+  const [dr, dc] = RDIR[st.dir];
+  let rr, cc;
+  if (cmd === 'F'){ rr = r + dr; cc = c + dc; }
+  else if (cmd === 'B'){ rr = r - dr; cc = c - dc; }
+  else { if (cell(r + dr, c + dc) !== 'R') return { ok:false, st }; rr = r + 2 * dr; cc = c + 2 * dc; }     // skok jen přes kámen
+  if (cell(rr, cc) !== '.') return { ok:false, st };
+  const np = rr * W + cc, ti = t.treats.indexOf(np);
+  return { ok:true, st:{ pos:np, dir:st.dir, got: ti >= 0 ? st.got | (1 << ti) : st.got } };
+}
+// nejkratší program (prohledávání do šířky přes polohu, směr a sebrané bonbony); vrací pole příkazů nebo null
+function robotSolve(t, allowJump = true){
+  const full = (1 << t.treats.length) - 1, key = s => (s.pos * 4 + s.dir) * 64 + s.got;
+  const s0 = { pos:t.from, dir:t.dir0, got:0 }, prev = new Map([[key(s0), null]]), q = [s0];
+  for (let h = 0; h < q.length; h++){
+    const s = q[h];
+    if (s.pos === t.flag && s.got === full){ const out = []; let k = key(s); while (prev.get(k)){ const [pk, cmd] = prev.get(k); out.unshift(cmd); k = pk; } return out; }
+    for (const cmd of RCMDS){
+      if (cmd === 'J' && !allowJump) continue;
+      const r = robotStep(t, s, cmd); if (!r.ok) continue;
+      const k = key(r.st); if (prev.has(k)) continue;
+      prev.set(k, [key(s), cmd]); q.push(r.st);
+    }
+  }
+  return null;
+}
+// Úroveň bez stropu: velikost, stromy, kameny, bonbony; od úrovně 6 (Rostík 8) programování předem
+function genRobot(lv, prof){
+  const prog = lv >= (prof === 'predskolak' ? 8 : 6);
+  const W = Math.min(12, 5 + Math.floor(lv / 2)), H = Math.min(9, 4 + Math.floor(lv / 3)), N = W * H;
+  const nT = lv <= 2 ? 0 : lv === 3 ? 1 : lv <= 6 ? 2 : Math.min(5, 2 + Math.floor((lv - 6) / 2));
+  const treeD = lv <= 2 ? .08 : Math.min(.25, .1 + lv * .015), rockD = lv >= 3 ? Math.min(.15, .05 + lv * .01) : 0;
+  const maxLen = prog ? Math.min(24, 10 + lv) : 60;
+  for (let guard = 0; ; guard++){
+    const board = Array(N).fill('.');
+    let from, dir0, flag;
+    if (lv === 1){
+      const r = R(0, H - 1); from = r * W; dir0 = 1; flag = r * W + R(2, W - 1);
+      for (let i = 0; i < N; i++) if (Math.floor(i / W) !== r && Math.random() < treeD) board[i] = 'T';
+    } else {
+      for (let i = 0; i < N; i++){ const x = Math.random(); board[i] = x < treeD ? 'T' : x < treeD + rockD ? 'R' : '.'; }
+      const free = shuffle([...Array(N).keys()].filter(i => board[i] === '.'));
+      if (free.length < nT + 4) continue;
+      from = free[0]; flag = free.find(i => i !== from && Math.abs(Math.floor(i / W) - Math.floor(from / W)) + Math.abs(i % W - from % W) >= 3);
+      if (flag === undefined) continue;
+      dir0 = R(0, 3);
+      if (lv === 2 && (Math.floor(flag / W) === Math.floor(from / W) || flag % W === from % W)) continue;   // musí zatočit
+    }
+    const freeT = shuffle([...Array(N).keys()].filter(i => board[i] === '.' && i !== from && i !== flag));
+    const treats = freeT.slice(0, nT);
+    const t = { op:'robot', lv, W, H, board, from, dir0, flag, treats, prog, interactive:true, ans:'flag' };
+    const sol = robotSolve(t);
+    if (!sol || sol.length > maxLen || sol.length < Math.min(lv + 1, 6)) continue;
+    if (lv >= 3 && !sol.includes('J') && guard < 300) continue;             // od úrovně 3 se má přeskakovat
+    t.opt = sol.length; t.solution = sol;
+    t.speech = 'Dovedeš robota k vlajce? Šipka nahoru jde dopředu, šipka dolů dozadu. Do strany musí robot nejdřív zatočit.'
+      + (lv >= 3 ? ' Přes kámen umí přeskočit.' : '') + (nT ? ` Cestou posbírej ${nT === 1 ? 'bonbon' : 'všechny bonbony'}.` : '')
+      + (prog ? ' Nejdřív naskládej všechny příkazy, potom zmáčkni zelené tlačítko a robot je provede.' : '');
+    t.okSay = pick(['Ano! Robot je u vlajky.', 'Výborně, robot došel do cíle!', 'Paráda, robot to zvládl!']);
+    return t;
+  }
+}
+
 // --- generátory podle úrovně (druhý parametr: profil) ---
 const GEN = {
   add(lv){
@@ -1460,17 +1552,17 @@ const GEN = {
   cmp: genCmp, shape: genShape, pos: genPos, seq: genSeq, clock: genClock, money: genMoney, sym: genSym,
   p_count: genPCount, p_color: genPColor, p_shape: genPShape, p_size: genPSize, p_pos: genPPos, p_seq: genPSeq, p_odd: genPOdd, p_pair: genPPair, p_digit: genPDigit,
   m_gone: genGone, m_pairs: genPairs, m_simon: genSimon, a_find: genFind, a_diff: genDiff, a_same: genSame,
-  maze: genMaze, sudoku: genSudoku, scales: genScales
+  maze: genMaze, sudoku: genSudoku, scales: genScales, robot: genRobot
 };
 
 // --- profily: parametry ovládání (upravují se tady, ne v kódu obrazovek) ---
 const PROFILES = {
   skolak:     { title:['Počítáme s ','Mariankou'], titleEn:['Counting with ','Marianka'], g:'f', round:10, up:4, down:2, rate:.92, kinds: [...SCHOOL_KINDS, ...LOGIC],
                 mix: ['add','add','sub','sub','mul','div','cmp','shape','pos','seq','clock','money','sym','sudoku','scales'] },
-  predskolak: { title:['Hrajeme si s ','Rostíkem'], titleEn:['Playing with ','Rostík'], g:'m', round:6, up:3, down:2, rate:.8, kinds: [...PRE_KINDS, 'maze'],
+  predskolak: { title:['Hrajeme si s ','Rostíkem'], titleEn:['Playing with ','Rostík'], g:'m', round:6, up:3, down:2, rate:.8, kinds: [...PRE_KINDS, 'maze', 'robot'],
                 mix: PRE_KINDS }
 };
-const KIND_ROUND = { maze: 5 };                 // bludiště je delší, kolo má 5 úloh
+const KIND_ROUND = { maze: 5, robot: 5 };       // bludiště a robot: kolo má 5 úloh (bludiště podle velikosti, MAZE_ROUND)
 const digitOpen = s => !!(s && (s.digitOpen || (s.levels && s.levels.p_count >= 2)));
 
 // Adaptivní obtížnost: up× za sebou napoprvé → úroveň výš, down× za sebou ne napoprvé → úroveň níž
@@ -1499,7 +1591,8 @@ const STICKERS = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨'
 // [číslo, obrázek, 1. pád, 4. pád, anglicky, datum, popis]
 const VERSIONS = [
   [7, '🦓', 'zebra', 'zebru', 'a zebra', '2026-10-22', 'fáze 6: úrovně 4–5, logika (bludiště, sudoku, váhy)'],
-  [8, '🐍', 'had', 'hada', 'a snake', '2026-10-22', 'fáze 7: úrovně bez stropu, těžší bludiště s výběrem velikosti, opravené váhy']
+  [8, '🐍', 'had', 'hada', 'a snake', '2026-10-22', 'fáze 7: úrovně bez stropu, těžší bludiště s výběrem velikosti, opravené váhy'],
+  [9, '🚗', 'autíčko', 'autíčko', 'a car', '2026-10-22', 'fáze 8: robot, bludiště v desítkách políček s posouváním']
 ];
 const VER = VERSIONS[VERSIONS.length - 1];
 
@@ -1509,7 +1602,7 @@ const VER = VERSIONS[VERSIONS.length - 1];
 // stav bez postupu = null → při spuštění výběr hráče.
 // Verze 5: jazyk ('cs' / 'en').
 // Verze 6: úrovně 4–5 a logika (bludiště, sudoku, váhy). Verze 7: úrovně bez stropu, velikost bludiště.
-const STATE_KEY = 'pocty-v1', STATE_VER = 7;
+const STATE_KEY = 'pocty-v1', STATE_VER = 8;          // verze 8: robot, velikost XXL
 function freshState(){
   const levels = {}, ad = {};
   for (const k of KINDS){ levels[k] = 1; ad[k] = {up:0, down:0}; }
@@ -1701,6 +1794,13 @@ function textEN(t){
     E.full = 'Can you take the mouse to the cheese? ' + (t.keys.length > 1 ? 'The cheese is locked, so the mouse must collect all the keys first. ' : t.keys.length ? 'The cheese is locked, so the mouse must find the key first. ' : '')
       + (t.fog ? 'The maze is foggy, you can only see a little around the mouse. ' : '') + 'Tap where the mouse should run.';
     E.short = 'Can you take the mouse to the cheese?'; E.ok = ['Yes! The mouse found the cheese.', 'Well done, the mouse is at the cheese!', 'Great, you found the way!'][t.W % 3];
+  } else if (o === 'robot'){
+    const n = t.treats.length;
+    E.full = "Can you take the robot to the flag? The up arrow goes forward, the down arrow goes back. To go sideways, the robot must turn first."
+      + (t.lv >= 3 ? ' The robot can jump over a rock.' : '') + (n ? ` Collect ${n === 1 ? 'the sweet' : 'all the sweets'} on the way.` : '')
+      + (t.prog ? ' First put all the commands in a row, then press the green button and the robot will do them.' : '');
+    E.short = t.prog ? 'Program the robot to reach the flag.' : n ? 'Collect the sweets and go to the flag.' : 'Take the robot to the flag.';
+    E.ok = ['Yes! The robot is at the flag.', 'Well done, the robot made it!', 'Great, the robot did it!'][t.opt % 3];
   } else if (o === 'sudoku'){
     E.full = 'Each picture is only once in every row, column and square. What goes in the yellow square?'; E.short = 'What goes in the yellow square?';
     E.ok = 'Yes! Nothing is repeated.'; E.reveal = 'This picture goes here. The others are already in the row, column or square.';
@@ -1718,6 +1818,7 @@ function textCS(t){
   else if (o === 'cmp'){ const E = e => `${w(e.x)} ${WORD[e.op]} ${w(e.y)}`; C.short = `Porovnej ${t.ex ? E(t.ex) : w(t.a)} a ${t.exR ? E(t.exR) : w(t.b)}.`; }
   else if (o === 'shape' && t.count) C.short = `Kolik je tu ${SHAPES[t.kind].gp}?`;
   else if (o === 'maze') C.short = 'Dovedeš myšku k sýru?';
+  else if (o === 'robot') C.short = t.prog ? 'Naprogramuj robota, ať dojde k vlajce.' : t.treats.length ? 'Posbírej bonbony a dojdi k vlajce.' : 'Dovedeš robota k vlajce?';
   else if (o === 'sudoku') C.short = 'Co patří do žlutého políčka?';
   else if (o === 'scales') C.short = 'Kolik jablek patří na prázdnou misku?';
   else if (o === 'seq' || o === 'p_seq') C.short = t.pattern ? 'Co patří místo otazníku?' : 'Které číslo chybí?';
@@ -1751,11 +1852,11 @@ function texts(t, lang){
   return t[k];
 }
 // Úlohy se stejným klíčem jdou za sebou jako „blok“: první má celé zadání, další krátké
-const VARIANT_FIELDS = ['missing','pics','count','pay','change','kind','dim','show','listen','pattern','same','axis','optType','grow','prop'];
+const VARIANT_FIELDS = ['missing','pics','count','pay','change','kind','dim','show','listen','pattern','same','axis','optType','grow','prop','prog'];
 const variantKey = t => t.op + '|' + t.lv + '|' + VARIANT_FIELDS.map(k => t[k] === undefined ? '' : String(t[k])).join(',');
 
 if (typeof module !== 'undefined') module.exports = { VERSIONS, VER, R, w, pl, GEN, make, choices, adapt, nextOp, speech, STICKERS, OPS, KINDS, SHAPES, PITEMS, freshState, migrate, encodeBackup, decodeBackup, STATE_KEY, STATE_VER, hparse, mirV, mirH, tkey, nextH,
-  SCHOOL_KINDS, PRE_KINDS, BRAIN, BRAIN_MIX, PROFILES, digitOpen, KITEMS, kCount, PCOLORS, COBJ, PSHAPES, ODD, SOUNDS, FOOD, SIMON, PEXESO, LOOK, dOf, LANGS, LOGIC, maxLv, isDyn, DYN_MAX, MAZE_SIZES, KIND_ROUND, mazeBFS, scaleWeights, PROP_N, SHAPE_PROPS, addMin, futPhrase, timePhrase, PI_EN, texts, textEN, textCS, variantKey, posEN };
+  SCHOOL_KINDS, PRE_KINDS, BRAIN, BRAIN_MIX, PROFILES, digitOpen, KITEMS, kCount, PCOLORS, COBJ, PSHAPES, ODD, SOUNDS, FOOD, SIMON, PEXESO, LOOK, dOf, LANGS, LOGIC, maxLv, isDyn, DYN_MAX, MAZE_SIZES, MAZE_ROUND, KIND_ROUND, robotStep, robotSolve, RDIR, mazeBFS, scaleWeights, PROP_N, SHAPE_PROPS, addMin, futPhrase, timePhrase, PI_EN, texts, textEN, textCS, variantKey, posEN };
 </script>
 
 <script>
@@ -1831,6 +1932,8 @@ const TX = {
     pair: ['Dvojice!', 'Máš je!', 'Super!', 'Paráda!'], allPairs: 'Všechny dvojice!',
     digitLocked: 'Číslice se odemknou, až budeš umět počítat obrázky do pěti.', brain: 'Paměť a pozornost!', logic: 'Logika!',
     needKey: 'Sýr je zamčený. Nejdřív posbírej všechny klíče.', gotKey: 'Máš klíč!',
+    bump: 'Bum! Tudy robot neprojde.', needTreats: 'Nejdřív posbírej všechny bonbony.', progFail: 'Robot narazil. Uprav program a zkus to znovu.',
+    progShort: 'Robot nedošel k vlajce. Přidej další příkazy.', progEmpty: 'Nejdřív naskládej příkazy.',
     levelUp: (lv, top) => top ? 'Postupuješ na nejvyšší úroveň! Jsi mistr!' : `Postupuješ na úroveň ${w(lv)}!`,
     hello: pre => pre ? 'Ahoj Rostíku! Vyber si hru.' : 'Ahoj Marianko! Vyber si hru.', langName: 'Čeština!',
     end: (n, perfect, g) => (perfect ? 'Úžasné! Všechno napoprvé! ' : '') + (n === 0 ? 'Hotovo! Za snahu dostáváš novou samolepku.' : `Hotovo! ${g === 'f' ? 'Získala' : 'Získal'} jsi ${w(n,'fa')} ${pl(n,'hvězdičku','hvězdičky','hvězdiček')} a novou samolepku.`),
@@ -1847,6 +1950,8 @@ const TX = {
     pair: ['A pair!', 'Got them!', 'Super!', 'Great!'], allPairs: 'All the pairs!',
     digitLocked: 'Numbers will unlock when you can count pictures up to five.', brain: 'Memory and attention!', logic: 'Logic!',
     needKey: 'The cheese is locked. Collect all the keys first.', gotKey: 'You got a key!',
+    bump: "Bump! The robot can't go there.", needTreats: 'Collect all the sweets first.', progFail: 'The robot bumped into something. Fix the program and try again.',
+    progShort: "The robot didn't reach the flag. Add more commands.", progEmpty: 'Put some commands in first.',
     levelUp: (lv, top) => top ? 'You reached the top level! You are a champion!' : `Level ${lv}!`,
     hello: pre => pre ? 'Hello Rostík! Choose a game.' : 'Hello Marianka! Choose a game.', langName: 'English!',
     end: (n, perfect) => (perfect ? 'Amazing! Everything right the first time! ' : '') + (n === 0 ? 'Done! Here is a new sticker for trying.' : `Done! You got ${n} ${n === 1 ? 'star' : 'stars'} and a new sticker.`),
@@ -1857,7 +1962,7 @@ const TX = {
 const MODE_EN = { add:'Addition', sub:'Subtraction', mul:'Multiplication', div:'Division', cmp:'Comparing', shape:'Shapes', pos:'Where is it?', seq:'Patterns', clock:'Clocks', money:'Money', sym:'Symmetry', mix:'Everything together',
   p_count:'How many?', p_color:'Colours', p_shape:'Shapes', p_size:'Big and small', p_pos:'Where is it?', p_seq:'Patterns', p_odd:"Which one doesn't belong?", p_pair:'Find the pair', p_digit:'Numbers',
   m_gone:'What disappeared?', m_pairs:'Memory game', m_simon:'Repeat after me', a_find:'Find them all', a_diff:'Spot the difference', a_same:'Same row',
-  maze:'Maze', sudoku:'Sudoku', scales:'Scales' };
+  maze:'Maze', sudoku:'Sudoku', scales:'Scales', robot:'Robot' };
 const Lx = () => TX[S.lang === 'en' ? 'en' : 'cs'];
 const TT = t => texts(t, S.lang === 'en' ? 'en' : 'cs');                    // texty úlohy v aktuálním jazyce
 const ask = t => t.useShort ? TT(t).short : TT(t).full;                       // zadání: celé na začátku bloku, pak krátké
@@ -2009,7 +2114,7 @@ function back(mode){ hush(); if (BRAIN.includes(mode)) brainRender(); else if (m
 const MODE_NAME = { add:'Sčítání', sub:'Odčítání', mul:'Násobení', div:'Dělení', cmp:'Porovnávání', shape:'Tvary', pos:'Kde to je?', seq:'Řady', clock:'Hodiny', money:'Peníze', sym:'Souměrnost', mix:'Všechno dohromady',
   p_count:'Kolik jich je?', p_color:'Barvy', p_shape:'Tvary', p_size:'Velké a malé', p_pos:'Kde to je?', p_seq:'Řady', p_odd:'Co sem nepatří?', p_pair:'Najdi dvojici', p_digit:'Číslice',
   m_gone:'Co zmizelo?', m_pairs:'Pexeso', m_simon:'Zopakuj po mně', a_find:'Najdi všechny', a_diff:'Najdi rozdíl', a_same:'Stejná řada',
-  maze:'Bludiště', sudoku:'Sudoku', scales:'Váhy' };
+  maze:'Bludiště', sudoku:'Sudoku', scales:'Váhy', robot:'Robot' };
 
 // Bludiště: nejdřív výběr velikosti
 let mazeFrom = 'home';
@@ -2017,8 +2122,8 @@ function mazeSizeRender(){
   const box = $('#sizes'); box.innerHTML = '';
   for (const k of Object.keys(MAZE_SIZES)){
     const [W, H] = MAZE_SIZES[k], b = el('button', k === S.mazeSize ? 'on' : '');
-    const mini = el('div', 'mini'); const cw = Math.round(64 / W); mini.style.gridTemplateColumns = `repeat(${W}, ${cw}px)`; mini.style.setProperty('--m', cw + 'px');
-    for (let i = 0; i < W * H; i++) mini.appendChild(el('i'));
+    const mini = el('div', 'mini');
+    const pw = Math.round(36 + W * 1.6), cell = pw / W; mini.style.width = pw + 'px'; mini.style.height = Math.round(cell * H) + 'px'; mini.style.backgroundSize = `${cell}px ${cell}px`;
     b.append(mini, el('b', '', S.lang === 'en' ? MAZE_SIZE_N[k][1] : MAZE_SIZE_N[k][0]), el('small', '', `${W} × ${H}`));
     b.addEventListener('click', () => { actx(); sfx('tap'); S.mazeSize = k; save(); say(Lx().mode('maze') + '!', () => startRound('maze')); });
     box.appendChild(b);
@@ -2108,7 +2213,7 @@ const PRE_AGAIN = ['Zkus jiný.', 'Hmm, ještě jednou.', 'Skoro. Zkus jiný.'];
 const alive = t => !!round && task === t;          // úloha pořád běží (dítě neodešlo domů)
 
 function startRound(mode){
-  round = { mode, i: 0, n: KIND_ROUND[mode] || P().round, res: [], streak: 0, stars: 0, prevOp: null, hint: false };
+  round = { mode, i: 0, n: mode === 'maze' ? (MAZE_ROUND[S.mazeSize] || 5) : KIND_ROUND[mode] || P().round, res: [], streak: 0, stars: 0, prevOp: null, hint: false };
   show('game');
   if (mode === 'm_pairs') return startBoard();
   nextTask();
@@ -2532,18 +2637,27 @@ function cardTap(t, i, c){
 // Bludiště: klepnutí na políčko ve stejném řádku nebo sloupci → myška běží, dokud jí nestojí v cestě zeď
 function renderMaze(t, p){
   p.className = 'stack';
-  const W = t.W, H = t.H, sz = Math.floor(Math.min((Math.min(VW(), 1300) * .96) / W, (VH() * (t.keys.length ? .7 : .76)) / H)) - 1;
+  const W = t.W, H = t.H, availW = Math.min(VW(), 1300) * .96, availH = VH() * (t.keys.length ? .7 : .76);
+  const minSz = VW() < 640 ? 30 : 38;                                    // políčko musí jít trefit prstem
+  const sz = Math.max(minSz, Math.floor(Math.min(availW / W, availH / H)) - 1);
   const box = el('div', 'maze'); box.style.gridTemplateColumns = `repeat(${W}, ${sz}px)`; box.style.gridAutoRows = sz + 'px'; box.style.fontSize = Math.floor(sz * .72) + 'px';
-  t.pos = t.entry; t.steps = 0; t.got = new Set(); t.visited = new Set([t.entry]); t.lit = new Set();
+  t.pos = t.entry; t.steps = 0; t.got = new Set(); t.visited = new Set([t.entry]); t.lit = new Set(); t.sz = sz;
   t.cellEls = t.cells.map((b, i) => {
     const c = el('div', 'mc' + (b & 1 ? '' : ' wt') + (b & 8 ? '' : ' wl'));
-    c.addEventListener('pointerdown', e => { e.preventDefault(); mazeTap(t, i); });
+    c.addEventListener('click', () => mazeTap(t, i));                   // klepnutí (ne tah): posunutí plochy myšku nerozjede
     box.appendChild(c); return c;
   });
   if (t.keys.length){ t.keyBar = el('div', 'keys'); p.appendChild(t.keyBar); }
-  p.appendChild(box);
+  const wrap = el('div', 'mazewrap'); wrap.style.maxHeight = Math.floor(availH) + 'px'; wrap.appendChild(box); t.wrap = wrap;
+  p.appendChild(wrap);
   mazeLight(t, t.entry);
   mazePaint(t);
+  requestAnimationFrame(() => mazeFollow(t, 'auto'));
+}
+function mazeFollow(t, how){                     // velké bludiště: plocha jede za myškou
+  const w = t.wrap; if (!w || (w.scrollWidth <= w.clientWidth && w.scrollHeight <= w.clientHeight)) return;
+  const r = Math.floor(t.pos / t.W), c = t.pos % t.W;
+  w.scrollTo({ left: c * t.sz - w.clientWidth / 2 + t.sz / 2, top: r * t.sz - w.clientHeight / 2 + t.sz / 2, behavior: how || 'smooth' });
 }
 function mazeLight(t, k){                    // mlha: odkryje políčka do vzdálenosti t.fog od myšky
   if (!t.fog) return;
@@ -2577,7 +2691,7 @@ function mazeTap(t, i){
     if (t.keys.includes(k) && !t.got.has(k)){ t.got.add(k); sfx('pair'); say(t.got.size === t.keys.length ? Lx().gotKey : Lx().gotKey); }
     mazePaint(t); sfx('flip');
     if (idx === path.length - 1){
-      locked = false;
+      locked = false; mazeFollow(t);
       if (t.pos === t.goal){
         if (t.got.size < t.keys.length) return say(Lx().needKey);
         tries = t.steps <= Math.ceil(t.shortest * 1.5) + 2 ? 0 : 1;   // napoprvé = rozumně krátká cesta
@@ -2613,9 +2727,86 @@ function renderScales(t, p){
   p.appendChild(row(t.q, null, true));
 }
 
+// ===================== fáze 8: robot =====================
+const RICON = { F:'⬆️', B:'⬇️', L:'↶', R:'↷', J:'🦘' };
+function renderRobot(t, p){
+  p.className = 'stack';
+  const W = t.W, H = t.H, ctrlH = t.prog ? 230 : 140;
+  const sz = Math.floor(Math.min(Math.min(VW(), 1100) * .94 / W, (VH() - 150 - ctrlH) / H));
+  const board = el('div', 'rboard'); board.style.gridTemplateColumns = `repeat(${W}, ${sz}px)`; board.style.gridAutoRows = sz + 'px'; board.style.fontSize = Math.floor(sz * .66) + 'px';
+  t.st = { pos:t.from, dir:t.dir0, got:0 }; t.bumps = 0; t.moves = 0; t.queue = []; t.running = false; t.failed = false;
+  t.cellEls = t.board.map(() => { const c = el('div', 'rc'); board.appendChild(c); return c; });
+  p.appendChild(board);
+  if (t.prog){ t.qEl = el('div', 'rq'); p.appendChild(t.qEl); }
+  const ctl = el('div', 'rctl');
+  const btn = (txt, cls, fn, label) => { const b = el('button', cls, txt); b.setAttribute('aria-label', label); b.addEventListener('click', fn); ctl.appendChild(b); return b; };
+  btn('↶', '', () => robotCmd(t, 'L'), 'doleva'); btn('⬆️', '', () => robotCmd(t, 'F'), 'dopředu'); btn('↷', '', () => robotCmd(t, 'R'), 'doprava');
+  btn('⬇️', '', () => robotCmd(t, 'B'), 'dozadu'); btn('🦘', '', () => robotCmd(t, 'J'), 'skok');
+  if (t.prog){ btn('⌫', 'del', () => { if (t.running || !t.queue.length) return; t.queue.pop(); sfx('tap'); robotQueue(t); }, 'smazat'); btn('▶️', 'run', () => robotRun(t), 'spustit'); }
+  p.appendChild(ctl);
+  robotPaint(t); if (t.prog) robotQueue(t);
+}
+function robotPaint(t){
+  t.cellEls.forEach((c, i) => {
+    c.innerHTML = ''; c.classList.toggle('flag', i === t.flag);
+    if (i === t.st.pos){ c.textContent = '🤖'; const d = el('span', 'rdir'); d.style.transform = `rotate(${t.st.dir * 90}deg)`; d.appendChild(el('i', '', '▲')); c.appendChild(d); return; }
+    const ti = t.treats.indexOf(i);
+    c.textContent = i === t.flag ? '🏁' : ti >= 0 && !(t.st.got & (1 << ti)) ? '🍬' : t.board[i] === 'T' ? '🌳' : t.board[i] === 'R' ? '🪨' : '';
+  });
+}
+function robotQueue(t, cur = -1, err = -1){
+  t.qEl.innerHTML = '';
+  if (!t.queue.length){ t.qEl.appendChild(el('span', '', '…')); return; }
+  t.queue.forEach((c, k) => t.qEl.appendChild(el('span', k === err ? 'err' : k === cur ? 'cur' : '', RICON[c])));
+}
+const robotFull = t => t.st.got === (1 << t.treats.length) - 1;
+function robotStepUI(t, cmd){                   // jeden krok; vrací false při nárazu
+  const before = t.st.got, r = robotStep(t, t.st, cmd);
+  if (!r.ok){ t.bumps++; sfx('bad'); const c = t.cellEls[t.st.pos]; c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); return false; }
+  t.st = r.st; t.moves++;
+  sfx(r.st.got !== before ? 'pair' : cmd === 'J' ? 'ok' : 'flip');
+  robotPaint(t);
+  return true;
+}
+function robotDone(t){
+  tries = (t.prog ? !t.failed : (t.bumps === 0 && t.moves <= t.opt + Math.max(2, Math.ceil(t.opt * .5)))) ? 0 : 1;   // napoprvé = bez nárazu a bez zbytečných kroků
+  scoreOk(t.cellEls[t.flag]);
+}
+function robotCmd(t, cmd){
+  if (locked || !alive(t)) return;
+  actx();
+  if (t.prog){ if (t.running || t.queue.length >= 30) return; t.queue.push(cmd); sfx('tap'); robotQueue(t); return; }
+  if (!robotStepUI(t, cmd)) return say(Lx().bump);
+  if (t.st.pos === t.flag){ if (robotFull(t)) robotDone(t); else say(Lx().needTreats); }
+}
+function robotRun(t){
+  if (locked || !alive(t) || t.running) return;
+  actx();
+  if (!t.queue.length) return say(Lx().progEmpty);
+  t.running = true; sfx('tap');
+  const reset = msg => { t.failed = true; say(msg); setTimeout(() => { if (!alive(t)) return; t.st = { pos:t.from, dir:t.dir0, got:0 }; t.running = false; robotPaint(t); robotQueue(t); }, 1400); };
+  let k = 0;
+  const step = () => {
+    if (!alive(t)) return;
+    if (k >= t.queue.length) return reset(Lx().progShort);
+    robotQueue(t, k);
+    if (!robotStepUI(t, t.queue[k])){ robotQueue(t, -1, k); return reset(Lx().progFail); }
+    if (t.st.pos === t.flag && robotFull(t)){ t.running = false; return robotDone(t); }
+    k++; setTimeout(step, 480);
+  };
+  setTimeout(step, 250);
+}
+document.addEventListener('keydown', e => {      // klávesnice u robota: šipky, mezerník = skok, Enter = spustit, Backspace = smazat
+  if (!task || task.op !== 'robot' || $('#game').hidden) return;
+  const m = { ArrowUp:'F', ArrowDown:'B', ArrowLeft:'L', ArrowRight:'R', ' ':'J' }[e.key];
+  if (m){ e.preventDefault(); robotCmd(task, m); }
+  else if (e.key === 'Enter' && task.prog){ e.preventDefault(); robotRun(task); }
+  else if (e.key === 'Backspace' && task.prog && !task.running && task.queue.length){ e.preventDefault(); task.queue.pop(); robotQueue(task); }
+});
+
 const RENDER = { p_count: renderPCount, p_color: listen, p_shape: renderPShape, p_size: listen, p_pos: renderPos, p_seq: renderSeq, p_odd: listen,
   p_pair: renderPPair, p_digit: renderPDigit, m_gone: renderGone, m_simon: renderSimon, a_find: renderFind, a_diff: renderDiff, a_same: renderSame,
-  maze: renderMaze, sudoku: renderSudoku, scales: renderScales };
+  maze: renderMaze, sudoku: renderSudoku, scales: renderScales, robot: renderRobot };
 
 function optLabel(t, v, btn){
   if (t.optType === 'clock'){ btn.innerHTML = clockSVG(...v.split(':').map(Number)); return; }

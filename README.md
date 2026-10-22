@@ -6,9 +6,9 @@ Hra na tablet se dvěma profily: **školák** (Marianka, 1. třída) a **předš
 
 Předškolák: kolik jich je, barvy, tvary, velké a malé, kde to je, řady, co sem nepatří, dvojice, číslice. Odpovědi obrázkem, 2–3 možnosti, kratší kolo, pomalejší hlas. Parametry profilů jsou v `PROFILES`.
 
-Úrovně: školák 1–5, předškolák 1–3; bez stropu: bludiště (oba), sudoku a paměť a pozornost (školák). Logika (školák): bludiště, sudoku s obrázky, váhy.
+Úrovně: školák 1–5, předškolák 1–3; bez stropu: bludiště a robot (oba), sudoku a paměť a pozornost (školák). Logika (školák): bludiště, sudoku s obrázky, váhy, robot. Předškolák má bludiště a robota na úvodní obrazovce.
 
-Verze: loďka vlevo dole na úvodní obrazovce veze obrázek verze (🐍 had = verze 8). Seznam je v `VERSIONS`, podrobnosti v rodičovské obrazovce.
+Verze: loďka vlevo dole na úvodní obrazovce veze obrázek verze (🚗 autíčko = verze 9). Seznam je v `VERSIONS`, podrobnosti v rodičovské obrazovce.
 
 Jazyk: vlajky 🇨🇿 / 🇬🇧 kdykoli přepnou hru a přečtou celé zadání v daném jazyce. Další úloha stejného typu má krátké zadání.
 
@@ -18,7 +18,7 @@ Hra: https://janzahradka.github.io/pocty/ (po zapnutí GitHub Pages)
 - Postup (hvězdičky, samolepky, úrovně) ukládá zařízení do localStorage (`pocty-v1`). Klíč se mezi verzemi nemění, nové verze stav jen doplní (`migrate()`).
 - Záloha pro rodiče: dlouhý stisk (2 s) na nadpis na úvodní obrazovce → zkopírovat / obnovit zálohu.
 - PWA: `manifest.webmanifest`, `sw.js`. Na tabletu „Přidat na plochu“ → běží na celou obrazovku a po prvním načtení i offline.
-- Test logiky: `node tests/gen.test.js` (včetně `tests/faze4.part.js` až `tests/faze7.part.js`).
+- Test logiky: `node tests/gen.test.js` (včetně `tests/faze4.part.js` až `tests/faze8.part.js`).
 
 ## Hlas
 Pokyny používají systémový český hlas zařízení. Když chybí, úvodní obrazovka zobrazí upozornění.
@@ -36,3 +36,4 @@ Repozitář veřejný, GitHub Pages ze složky root větve `main`. Při každé 
 - [Fáze 5](docs/faze-5.md) – čeština / angličtina, kratší zadání
 - [Fáze 6](docs/faze-6.md) – úrovně 4–5, logika (bludiště, sudoku, váhy), verze na loďce
 - [Fáze 7](docs/faze-7.md) – úrovně bez stropu, těžší bludiště s výběrem velikosti, opravené váhy
+- [Fáze 8](docs/faze-8.md) – robot, bludiště v desítkách políček s posouváním

@@ -8,7 +8,7 @@ module.exports = function (L, bad, chk) {
 
   // ---- bludiště ----
   const perms = a => a.length <= 1 ? [a] : a.flatMap((x, i) => perms([...a.slice(0, i), ...a.slice(i + 1)]).map(p => [x, ...p]));
-  for (const size of ['S', 'M', 'L', 'XL']) for (const portrait of [false, true]) for (const lv of [1, 2, 3, 4, 5, 7, 9, 12, 20]) for (let i = 0; i < 25; i++) {
+  for (const size of ['S', 'M', 'L', 'XL', 'XXL']) for (const portrait of [false, true]) for (const lv of [1, 2, 3, 4, 5, 7, 9, 12, 20]) for (let i = 0; i < (size === 'S' || size === 'M' ? 25 : 4); i++) {
     const m = L.GEN.maze(lv, 'skolak', { size, portrait }); texts(m, `maze${size}${lv}`);
     let [W, H] = L.MAZE_SIZES[size]; if (portrait) [W, H] = [H, W];
     if (m.W !== W || m.H !== H || m.cells.length !== W * H) bad(`maze rozměr ${size} ${m.W}×${m.H}`);
@@ -39,7 +39,7 @@ module.exports = function (L, bad, chk) {
   if (d6 < d1 * 1.8) bad(`maze odbočky ${d1 / 60} → ${d6 / 60}`);
   console.log(`bludiště L: slepých uliček průměrně úroveň 1 = ${(d1 / 60).toFixed(1)}, úroveň 6 = ${(d6 / 60).toFixed(1)}`);
   chk(L.GEN.maze(1, 'predskolak').W, 8, 'Rostík: malé bludiště');
-  chk(L.GEN.maze(1, 'skolak').W, 12, 'Marianka: střední bludiště');
+  chk(L.GEN.maze(1, 'skolak').W, L.MAZE_SIZES.M[0], 'Marianka: střední bludiště');
 
   // ---- sudoku: úrovně 6–15 ----
   for (const lv of [6, 7, 8, 9, 10, 12, 15]) for (let i = 0; i < 150; i++) {
@@ -98,7 +98,7 @@ module.exports = function (L, bad, chk) {
   chk(L.migrate({ ...m7, mazeSize: 'ZZ' }).mazeSize, 'M', 'neplatná velikost');
   chk(L.migrate({ ver: 6, profile: 'predskolak', stars: 1, stickers: [], rounds: 1 }).mazeSize, 'S', 'Rostík malé');
   chk(L.migrate(m7), m7, 'v7 idempotentní');
-  chk(L.VER[0], 8, 'verze 8'); chk(L.VER[1], '🐍', 'had');
+  chk(L.VERSIONS.find(v => v[0] === 8)[1], '🐍', 'verze 8 = had');
 
   // ---- vyhrazená pole: UI používá task.start / repeat / play jako funkce ----
   for (const op of L.KINDS) for (const prof of ['skolak', 'predskolak']) for (const lv of [1, 4, 9]) {

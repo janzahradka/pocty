@@ -164,6 +164,7 @@ require('./faze4.part.js')(L, bad, chk);
 require('./faze5.part.js')(L, bad, chk);
 require('./faze6.part.js')(L, bad, chk);
 require('./faze7.part.js')(L, bad, chk);
+require('./faze8.part.js')(L, bad, chk);
 
 console.log(fails ? `\n${fails} CHYB` : '\nVše OK');
 process.exit(fails ? 1 : 0);
