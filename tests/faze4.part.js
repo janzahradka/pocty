@@ -129,7 +129,7 @@ module.exports = function (L, bad, chk) {
   const st0 = L.freshState();
   for (let i = 0; i < 5000; i++) {
     const a = L.nextOp('mix', null, 'skolak', st0), b = L.nextOp('mix', null, 'predskolak', st0);
-    if (!(L.SCHOOL_KINDS.includes(a) || L.BRAIN_MIX.includes(a))) bad('mix školák ' + a);
+    if (!(L.SCHOOL_KINDS.includes(a) || L.BRAIN_MIX.includes(a) || (L.LOGIC || []).includes(a))) bad('mix školák ' + a);
     if (!(L.PRE_KINDS.includes(b) || L.BRAIN_MIX.includes(b))) bad('mix předškolák ' + b);
     if (b === 'p_digit') bad('číslice v mixu před odemčením');
     if (a === 'm_pairs' || b === 'm_pairs') bad('pexeso v mixu');
