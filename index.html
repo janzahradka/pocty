@@ -1341,11 +1341,15 @@ function voiceWarn(){ if (voicesChecked || !('speechSynthesis' in window)) $('#n
 if ('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
 setTimeout(() => { pickVoice(); voiceWarn(); }, 2000);
 
-let sayToken = 0;
+let sayToken = 0, pendingEnd = null;
+// Když nová věta přeruší větu, na kterou čeká další krok (např. přechod na další úlohu po pochvale),
+// a sama žádný krok nemá, převezme ho. Klepnutí na vlajku nebo 🔊 tak hru nezastaví. hush() krok zruší.
 function say(text, onend){
+  if (!onend && pendingEnd) onend = pendingEnd;
+  pendingEnd = onend || null;
   const my = ++sayToken;
   let done = false;
-  const fin = () => { if (done) return; done = true; if (onend && my === sayToken) onend(); };
+  const fin = () => { if (done) return; done = true; if (my !== sayToken) return; pendingEnd = null; if (onend) onend(); };
   if (!('speechSynthesis' in window)){ setTimeout(fin, 700); return; }
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
@@ -1356,7 +1360,7 @@ function say(text, onend){
   setTimeout(fin, 1500 + text.length * 85);      // pojistka, když prohlížeč onend nepošle
   speechSynthesis.speak(u);
 }
-function hush(){ sayToken++; if ('speechSynthesis' in window) speechSynthesis.cancel(); }
+function hush(){ sayToken++; pendingEnd = null; if ('speechSynthesis' in window) speechSynthesis.cancel(); }
 
 // --- hlášky UI v obou jazycích ---
 const TX = {

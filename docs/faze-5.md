@@ -68,3 +68,8 @@ Angličtina: čísla se vyslovují číslicemi (hlas je přečte), čas „half 
 ## K ručnímu ověření
 1. Na tabletu zkusit 🇬🇧: musí zaznít anglický hlas. Když se objeví upozornění na chybějící anglický hlas, doinstalovat angličtinu (UK) v nastavení převodu textu na řeč.
 2. Hodiny nebo peníze: první úloha dlouze, další krátce. Při nejasnosti 🇨🇿 přečte celé zadání.
+
+## Oprava po nasazení: hra se nepohnula po klepnutí na vlajku
+- Chyba: po vyřešení úlohy hra čeká, až dořekne pochvalu, a teprve pak přejde na další úlohu. Klepnutí na vlajku (nebo 🔊 / 👂) v tu chvíli přerušilo pochvalu novou větou a přechod na další úlohu se ztratil. Úloha zůstala zamčená se zvýrazněnou správnou odpovědí. Stejně se mohlo zastavit „Co zmizelo?“ a „Zopakuj“, když se na vlajku klepnulo během úvodu.
+- Oprava v `say()`: když nová věta přeruší větu s navazujícím krokem a sama žádný nemá, krok převezme. `hush()` (odchod domů) krok zruší. Cache `pocty-v6`.
+- Ověřeno v headless Chromiu se zpomaleným hlasem (chyba se před opravou reprodukovala): vlajka EN i CZ a 🔊 po správné odpovědi, vlajka po nápovědě předškoláka, vlajka po odhalení odpovědi školákovi, vlajka během úvodu „Co zmizelo?“ a „Zopakuj“. Ve všech případech hra pokračuje. Odchod domů během pochvaly hru nespustí. Testy logiky i test fáze 5 procházejí.
