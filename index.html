@@ -222,6 +222,15 @@ body.pre .answers.big .ans{height:clamp(130px,30vh,260px)}
 .card.done{background:#c8f5dc;box-shadow:0 2px 0 rgba(0,0,0,.1)}
 @keyframes flip{0%{transform:scaleX(.1)}100%{transform:scaleX(1)}}
 
+/* Fáze 5: vlajky */
+.flags{display:flex;gap:8px;flex:none}
+.flags.corner{position:absolute;top:max(12px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));z-index:3}
+.flag{width:62px;height:44px;padding:0;border-radius:10px;overflow:hidden;box-shadow:var(--shadow);opacity:.55;background:#fff;transition:transform .08s,opacity .1s}
+.flag svg{width:100%;height:100%;display:block}
+.flag.on{opacity:1;outline:4px solid var(--orange);outline-offset:1px}
+.flag:active{transform:translateY(3px)}
+@media (max-width:640px){.flag{width:44px;height:32px;border-radius:8px}.top{gap:6px}.top .round{width:52px;height:52px;font-size:26px}}
+
 /* Konec kola, album, rodiče */
 #end,#album,#parent{align-items:center;justify-content:center;gap:clamp(12px,3vh,26px);text-align:center}
 .big-stars{font-size:clamp(30px,5vw,56px);font-weight:800}
@@ -241,60 +250,63 @@ body.pre .answers.big .ans{height:clamp(130px,30vh,260px)}
 <body>
 
 <section id="home" class="screen">
+  <div class="flags corner"></div>
   <h1 class="title" id="h-title">Počítáme s <span>Mariankou</span></h1>
   <div class="badges"><div class="badge">⭐ <span id="h-stars">0</span></div><div class="badge">🎁 <span id="h-stk">0</span></div></div>
   <div class="tiles" id="tiles-skolak">
-    <button class="tile t-add" data-mode="add"><b>+</b><small>sčítání</small><span class="lv" data-lv="add"></span></button>
-    <button class="tile t-sub" data-mode="sub"><b>−</b><small>odčítání</small><span class="lv" data-lv="sub"></span></button>
-    <button class="tile t-mul" data-mode="mul"><b>·</b><small>násobení</small><span class="lv" data-lv="mul"></span></button>
-    <button class="tile t-div" data-mode="div"><b>:</b><small>dělení</small><span class="lv" data-lv="div"></span></button>
-    <button class="tile t-cmp" data-mode="cmp"><b>&lt; =</b><small>porovnávání</small><span class="lv" data-lv="cmp"></span></button>
-    <button class="tile t-shape" data-mode="shape"><b class="sm">🔺🟦</b><small>tvary</small><span class="lv" data-lv="shape"></span></button>
-    <button class="tile t-pos" data-mode="pos"><b class="sm">👈🧸👉</b><small>kde to je?</small><span class="lv" data-lv="pos"></span></button>
-    <button class="tile t-seq" data-mode="seq"><b class="sm">🔴🔵❓</b><small>řady</small><span class="lv" data-lv="seq"></span></button>
-    <button class="tile t-clock" data-mode="clock"><b class="sm">🕒</b><small>hodiny</small><span class="lv" data-lv="clock"></span></button>
-    <button class="tile t-money" data-mode="money"><b class="sm">🪙 Kč</b><small>peníze</small><span class="lv" data-lv="money"></span></button>
-    <button class="tile t-sym" data-mode="sym"><b class="sm">🦋</b><small>souměrnost</small><span class="lv" data-lv="sym"></span></button>
-    <button class="tile t-brain to-brain"><b class="sm">🧠</b><small>paměť</small><span class="lv"></span></button>
-    <button class="tile t-mix" data-mode="mix"><b>🎲</b><small>všechno</small><span class="lv"></span></button>
-    <button class="tile t-album to-album"><b>🎁</b><small>samolepky</small><span class="lv"></span></button>
+    <button class="tile t-add" data-mode="add"><b>+</b><small data-en="plus">sčítání</small><span class="lv" data-lv="add"></span></button>
+    <button class="tile t-sub" data-mode="sub"><b>−</b><small data-en="minus">odčítání</small><span class="lv" data-lv="sub"></span></button>
+    <button class="tile t-mul" data-mode="mul"><b>·</b><small data-en="times">násobení</small><span class="lv" data-lv="mul"></span></button>
+    <button class="tile t-div" data-mode="div"><b>:</b><small data-en="divide">dělení</small><span class="lv" data-lv="div"></span></button>
+    <button class="tile t-cmp" data-mode="cmp"><b>&lt; =</b><small data-en="compare">porovnávání</small><span class="lv" data-lv="cmp"></span></button>
+    <button class="tile t-shape" data-mode="shape"><b class="sm">🔺🟦</b><small data-en="shapes">tvary</small><span class="lv" data-lv="shape"></span></button>
+    <button class="tile t-pos" data-mode="pos"><b class="sm">👈🧸👉</b><small data-en="where is it?">kde to je?</small><span class="lv" data-lv="pos"></span></button>
+    <button class="tile t-seq" data-mode="seq"><b class="sm">🔴🔵❓</b><small data-en="patterns">řady</small><span class="lv" data-lv="seq"></span></button>
+    <button class="tile t-clock" data-mode="clock"><b class="sm">🕒</b><small data-en="clocks">hodiny</small><span class="lv" data-lv="clock"></span></button>
+    <button class="tile t-money" data-mode="money"><b class="sm">🪙 Kč</b><small data-en="money">peníze</small><span class="lv" data-lv="money"></span></button>
+    <button class="tile t-sym" data-mode="sym"><b class="sm">🦋</b><small data-en="symmetry">souměrnost</small><span class="lv" data-lv="sym"></span></button>
+    <button class="tile t-brain to-brain"><b class="sm">🧠</b><small data-en="memory">paměť</small><span class="lv"></span></button>
+    <button class="tile t-mix" data-mode="mix"><b>🎲</b><small data-en="everything">všechno</small><span class="lv"></span></button>
+    <button class="tile t-album to-album"><b>🎁</b><small data-en="stickers">samolepky</small><span class="lv"></span></button>
   </div>
   <div class="tiles pre" id="tiles-predskolak" hidden>
-    <button class="tile" style="background:#22b56a" data-mode="p_count"><b class="sm">🍎🍎🍎</b><small>kolik?</small><span class="lv" data-lv="p_count"></span></button>
-    <button class="tile" style="background:#e0702a" data-mode="p_color"><b class="sm">🎨</b><small>barvy</small><span class="lv" data-lv="p_color"></span></button>
-    <button class="tile" style="background:#2f9bff" data-mode="p_shape"><b class="sm">🔺🟦</b><small>tvary</small><span class="lv" data-lv="p_shape"></span></button>
-    <button class="tile" style="background:#a8683a" data-mode="p_size"><b class="sm">🐘🐭</b><small>velké a malé</small><span class="lv" data-lv="p_size"></span></button>
-    <button class="tile" style="background:#4a7bd8" data-mode="p_pos"><b class="sm">⬆️🧸⬇️</b><small>kde to je?</small><span class="lv" data-lv="p_pos"></span></button>
-    <button class="tile" style="background:#c04fd6" data-mode="p_seq"><b class="sm">🔴🔵❓</b><small>řady</small><span class="lv" data-lv="p_seq"></span></button>
-    <button class="tile" style="background:#13b5b1" data-mode="p_odd"><b class="sm">🐶🐱🚗</b><small>co nepatří?</small><span class="lv" data-lv="p_odd"></span></button>
-    <button class="tile" style="background:#ff5fa8" data-mode="p_pair"><b class="sm">🐰🥕</b><small>dvojice</small><span class="lv" data-lv="p_pair"></span></button>
-    <button class="tile" style="background:#7b5cff" data-mode="p_digit" id="t-digit"><b>123</b><small>číslice</small><span class="lv" data-lv="p_digit"></span></button>
-    <button class="tile t-brain to-brain"><b class="sm">🧠</b><small>paměť</small><span class="lv"></span></button>
-    <button class="tile t-mix" data-mode="mix"><b>🎲</b><small>všechno</small><span class="lv"></span></button>
-    <button class="tile t-album to-album"><b>🎁</b><small>samolepky</small><span class="lv"></span></button>
+    <button class="tile" style="background:#22b56a" data-mode="p_count"><b class="sm">🍎🍎🍎</b><small data-en="how many?">kolik?</small><span class="lv" data-lv="p_count"></span></button>
+    <button class="tile" style="background:#e0702a" data-mode="p_color"><b class="sm">🎨</b><small data-en="colours">barvy</small><span class="lv" data-lv="p_color"></span></button>
+    <button class="tile" style="background:#2f9bff" data-mode="p_shape"><b class="sm">🔺🟦</b><small data-en="shapes">tvary</small><span class="lv" data-lv="p_shape"></span></button>
+    <button class="tile" style="background:#a8683a" data-mode="p_size"><b class="sm">🐘🐭</b><small data-en="big & small">velké a malé</small><span class="lv" data-lv="p_size"></span></button>
+    <button class="tile" style="background:#4a7bd8" data-mode="p_pos"><b class="sm">⬆️🧸⬇️</b><small data-en="where is it?">kde to je?</small><span class="lv" data-lv="p_pos"></span></button>
+    <button class="tile" style="background:#c04fd6" data-mode="p_seq"><b class="sm">🔴🔵❓</b><small data-en="patterns">řady</small><span class="lv" data-lv="p_seq"></span></button>
+    <button class="tile" style="background:#13b5b1" data-mode="p_odd"><b class="sm">🐶🐱🚗</b><small data-en="odd one out">co nepatří?</small><span class="lv" data-lv="p_odd"></span></button>
+    <button class="tile" style="background:#ff5fa8" data-mode="p_pair"><b class="sm">🐰🥕</b><small data-en="pairs">dvojice</small><span class="lv" data-lv="p_pair"></span></button>
+    <button class="tile" style="background:#7b5cff" data-mode="p_digit" id="t-digit"><b>123</b><small data-en="numbers">číslice</small><span class="lv" data-lv="p_digit"></span></button>
+    <button class="tile t-brain to-brain"><b class="sm">🧠</b><small data-en="memory">paměť</small><span class="lv"></span></button>
+    <button class="tile t-mix" data-mode="mix"><b>🎲</b><small data-en="everything">všechno</small><span class="lv"></span></button>
+    <button class="tile t-album to-album"><b>🎁</b><small data-en="stickers">samolepky</small><span class="lv"></span></button>
   </div>
-  <div class="warn" id="novoice" hidden>Na tomto zařízení chybí český hlas, pokyny nebude slyšet. Doinstalujte ho v nastavení zařízení (Převod textu na řeč / Mluvený obsah → čeština).</div>
+  <div class="warn" id="novoice" hidden data-en="This device has no English voice. Install it in the device settings (Text-to-speech / Spoken content → English).">Na tomto zařízení chybí český hlas, pokyny nebude slyšet. Doinstalujte ho v nastavení zařízení (Převod textu na řeč / Mluvený obsah → čeština).</div>
 </section>
 
 <section id="who" class="screen" hidden>
-  <div class="title">Kdo bude hrát?</div>
+  <div class="flags corner"></div>
+  <div class="title" data-en="Who is playing?">Kdo bude hrát?</div>
   <div class="who">
-    <button data-prof="skolak" style="background:var(--orange)"><b>👧</b><span>Marianka</span><small>školák</small></button>
-    <button data-prof="predskolak" style="background:var(--blue)"><b>👦</b><span>Rostík</span><small>předškolák</small></button>
+    <button data-prof="skolak" style="background:var(--orange)"><b>👧</b><span>Marianka</span><small data-en="schoolchild">školák</small></button>
+    <button data-prof="predskolak" style="background:var(--blue)"><b>👦</b><span>Rostík</span><small data-en="preschooler">předškolák</small></button>
   </div>
 </section>
 
 <section id="brain" class="screen" hidden>
-  <div class="title" style="font-size:clamp(30px,5vw,54px)">🧠 Paměť a pozornost</div>
+  <div class="flags corner"></div>
+  <div class="title" style="font-size:clamp(30px,5vw,54px)" data-en="🧠 Memory and attention">🧠 Paměť a pozornost</div>
   <div class="tiles brain">
-    <button class="tile" style="background:#7b5cff" data-mode="m_gone"><b class="sm">🙈❓</b><small>co zmizelo?</small><span class="lv" data-lv="m_gone"></span></button>
-    <button class="tile" style="background:#e0702a" data-mode="m_pairs"><b class="sm">🃏🃏</b><small>pexeso</small><span class="lv" data-lv="m_pairs"></span></button>
-    <button class="tile" style="background:#22b56a" data-mode="m_simon"><b class="sm">🐶🎵🐱</b><small>zopakuj</small><span class="lv" data-lv="m_simon"></span></button>
-    <button class="tile" style="background:#2f9bff" data-mode="a_find"><b class="sm">🔍</b><small>najdi všechny</small><span class="lv" data-lv="a_find"></span></button>
-    <button class="tile" style="background:#ff5fa8" data-mode="a_diff"><b class="sm">👀</b><small>najdi rozdíl</small><span class="lv" data-lv="a_diff"></span></button>
-    <button class="tile" style="background:#13b5b1" data-mode="a_same"><b class="sm">🔴🟡=</b><small>stejná řada</small><span class="lv" data-lv="a_same"></span></button>
+    <button class="tile" style="background:#7b5cff" data-mode="m_gone"><b class="sm">🙈❓</b><small data-en="what's gone?">co zmizelo?</small><span class="lv" data-lv="m_gone"></span></button>
+    <button class="tile" style="background:#e0702a" data-mode="m_pairs"><b class="sm">🃏🃏</b><small data-en="memory game">pexeso</small><span class="lv" data-lv="m_pairs"></span></button>
+    <button class="tile" style="background:#22b56a" data-mode="m_simon"><b class="sm">🐶🎵🐱</b><small data-en="repeat">zopakuj</small><span class="lv" data-lv="m_simon"></span></button>
+    <button class="tile" style="background:#2f9bff" data-mode="a_find"><b class="sm">🔍</b><small data-en="find them all">najdi všechny</small><span class="lv" data-lv="a_find"></span></button>
+    <button class="tile" style="background:#ff5fa8" data-mode="a_diff"><b class="sm">👀</b><small data-en="spot it">najdi rozdíl</small><span class="lv" data-lv="a_diff"></span></button>
+    <button class="tile" style="background:#13b5b1" data-mode="a_same"><b class="sm">🔴🟡=</b><small data-en="same row">stejná řada</small><span class="lv" data-lv="a_same"></span></button>
   </div>
-  <button class="btn wide" id="b-home">🏠 Domů</button>
+  <button class="btn wide" id="b-home" data-en="🏠 Home">🏠 Domů</button>
 </section>
 
 <section id="game" class="screen" hidden>
@@ -302,6 +314,7 @@ body.pre .answers.big .ans{height:clamp(130px,30vh,260px)}
     <button class="btn round" id="g-home" aria-label="Domů">🏠</button>
     <div class="dots" id="dots"></div>
     <div class="starcount">⭐ <span id="g-stars">0</span></div>
+    <div class="flags"></div>
     <button class="btn round" id="g-say" aria-label="Zopakovat">🔊</button>
   </div>
   <div class="stage">
@@ -312,19 +325,19 @@ body.pre .answers.big .ans{height:clamp(130px,30vh,260px)}
 </section>
 
 <section id="end" class="screen" hidden>
-  <div class="title">Hotovo!</div>
+  <div class="title" data-en="Done!">Hotovo!</div>
   <div class="big-stars" id="e-stars"></div>
   <div class="sticker-new" id="e-sticker"></div>
   <div class="row">
-    <button class="btn wide" id="e-again">🔁 Znovu</button>
-    <button class="btn wide" id="e-home">🏠 Domů</button>
+    <button class="btn wide" id="e-again" data-en="🔁 Again">🔁 Znovu</button>
+    <button class="btn wide" id="e-home" data-en="🏠 Home">🏠 Domů</button>
   </div>
 </section>
 
 <section id="album" class="screen" hidden>
-  <div class="title">Moje samolepky</div>
+  <div class="title" data-en="My stickers">Moje samolepky</div>
   <div class="grid" id="a-grid"></div>
-  <button class="btn wide" id="a-home">🏠 Domů</button>
+  <button class="btn wide" id="a-home" data-en="🏠 Home">🏠 Domů</button>
 </section>
 
 <section id="parent" class="screen" hidden>
@@ -501,7 +514,7 @@ const PITEMS = [
 ];
 function posTask(lv, scene, ansItem, phrase, cands, extra){
   const opts = uniq([ansItem.e, ...cands.map(x => x.e), ...extra.map(x => x.e)]).slice(0,4);
-  const t = { op:'pos', lv, scene, ans:ansItem.e, opts:shuffle(opts), optType:'emoji', hl:ansItem.e };
+  const t = { op:'pos', lv, scene, ans:ansItem.e, opts:shuffle(opts), optType:'emoji', hl:ansItem.e, phrase };
   t.speech = `Co je ${phrase}?`;
   t.okSay = `Ano, ${phrase} je ${ansItem.n}.`;
   t.revealSay = `${cap(phrase)} je ${ansItem.n}.`;
@@ -1040,9 +1053,9 @@ const GEN = {
 
 // --- profily: parametry ovládání (upravují se tady, ne v kódu obrazovek) ---
 const PROFILES = {
-  skolak:     { title:['Počítáme s ','Mariankou'], g:'f', round:10, up:4, down:2, rate:.92, kinds: SCHOOL_KINDS,
+  skolak:     { title:['Počítáme s ','Mariankou'], titleEn:['Counting with ','Marianka'], g:'f', round:10, up:4, down:2, rate:.92, kinds: SCHOOL_KINDS,
                 mix: ['add','add','sub','sub','mul','div','cmp','shape','pos','seq','clock','money','sym'] },
-  predskolak: { title:['Hrajeme si s ','Rostíkem'], g:'m', round:6, up:3, down:2, rate:.8, kinds: PRE_KINDS,
+  predskolak: { title:['Hrajeme si s ','Rostíkem'], titleEn:['Playing with ','Rostík'], g:'m', round:6, up:3, down:2, rate:.8, kinds: PRE_KINDS,
                 mix: PRE_KINDS }
 };
 const digitOpen = s => !!(s && (s.digitOpen || (s.levels && s.levels.p_count >= 2)));
@@ -1071,11 +1084,12 @@ const STICKERS = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨'
 // Klíč 'pocty-v1' zůstává napříč verzemi. Nové verze jen doplní chybějící položky, nic nemažou.
 // Verze 4: profil hráče. Stav bez profilu s postupem (hvězdičky, kola, samolepky) = 'skolak' (Mariančin tablet),
 // stav bez postupu = null → při spuštění výběr hráče.
-const STATE_KEY = 'pocty-v1', STATE_VER = 4;
+// Verze 5: jazyk ('cs' / 'en').
+const STATE_KEY = 'pocty-v1', STATE_VER = 5;
 function freshState(){
   const levels = {}, ad = {};
   for (const k of KINDS){ levels[k] = 1; ad[k] = {up:0, down:0}; }
-  return { ver: STATE_VER, profile: null, stars: 0, stickers: [], rounds: 0, levels, adapt: ad };
+  return { ver: STATE_VER, profile: null, lang: 'cs', stars: 0, stickers: [], rounds: 0, levels, adapt: ad };
 }
 function migrate(o){
   const s = freshState();
@@ -1092,6 +1106,7 @@ function migrate(o){
   }
   if (Object.keys(PROFILES).includes(o.profile)) s.profile = o.profile;
   else s.profile = (s.stars > 0 || s.rounds > 0 || s.stickers.length > 0) ? 'skolak' : null;
+  s.lang = LANGS.includes(o.lang) ? o.lang : 'cs';
   s.ver = STATE_VER;
   return s;
 }
@@ -1104,8 +1119,186 @@ function decodeBackup(code){
 function btoaU(s){ return typeof btoa !== 'undefined' ? btoa(unescape(encodeURIComponent(s))) : Buffer.from(s, 'utf8').toString('base64'); }
 function atobU(s){ return typeof atob !== 'undefined' ? decodeURIComponent(escape(atob(s))) : Buffer.from(s, 'base64').toString('utf8'); }
 
+
+// =====================================================================
+// FÁZE 5: jazyk (čeština / angličtina) a kratší zadání u opakované úlohy
+// =====================================================================
+// Pro každou úlohu: full (celé zadání), short (krátké zadání pro další úlohu stejného typu),
+// ok (pochvala s vysvětlením), okShort (kratší pochvala při opakování), reveal (po druhé chybě), intro / introShort.
+const LANGS = ['cs', 'en'];
+const OPW_EN = {add:'plus', sub:'minus', mul:'times'};
+const SHAPE_EN = {kruh:['circle','circles'], ctverec:['square','squares'], obdelnik:['rectangle','rectangles'], trojuhelnik:['triangle','triangles'],
+  primka:['line','lines'], krychle:['cube','cubes'], kvadr:['cuboid','cuboids'], koule:['sphere','spheres'], valec:['cylinder','cylinders'],
+  oval:['oval','ovals'], hvezda:['star','stars'], srdce:['heart','hearts']};
+const PI_EN = {'🐶':'dog','🐱':'cat','🧸':'teddy bear','🍎':'apple','⚽':'ball','🚗':'car','🌻':'flower','🐟':'fish','🎈':'balloon','⭐':'star','🎂':'cake','🐰':'bunny','🦆':'duck','🍌':'banana'};
+const KI_EN = {'🍎':['apple','apples'],'🐞':['ladybird','ladybirds'],'🚗':['car','cars'],'🐟':['fish','fish'],'🎈':['balloon','balloons'],'⭐':['star','stars'],
+  '🐥':['chick','chicks'],'🌸':['flower','flowers'],'🍓':['strawberry','strawberries'],'🦆':['duck','ducks']};
+const COLOR_EN = {cervena:'red', modra:'blue', zluta:'yellow', zelena:'green', oranzova:'orange', fialova:'purple', ruzova:'pink', hneda:'brown', cerna:'black', bila:'white'};
+const COBJ_EN = {auto:'car', balonek:'balloon', kostka:'block', ryba:'fish', hvezda:'star', srdce:'heart'};
+const BUY_EN = {'🍭':'lollipop','🍦':'ice cream','🧸':'teddy bear','🎈':'balloon','📕':'book','🍎':'apple','🧃':'juice','🖍️':'crayons'};
+const SOUND_EN = {'🐶':['dog','woof woof'],'🐱':['cat','meow'],'🐮':['cow','moo'],'🐷':['pig','oink oink'],'🐑':['sheep','baa'],'🦆':['duck','quack quack'],
+  '🐔':['hen','cluck cluck'],'🐴':['horse','neigh'],'🐭':['mouse','squeak squeak'],'🐝':['bee','buzz'],'🦉':['owl','hoo hoo']};
+const FOOD_EN = {'🐰':['bunny','carrots'],'🐵':['monkey','bananas'],'🐶':['dog','bones'],'🐭':['mouse','cheese'],'🐻':['bear','honey'],'🐿️':['squirrel','nuts'],'🐝':['bee','flowers'],'🐱':['cat','milk']};
+const ODD_EN = {zvirata:'The others are animals.', doprava:'The others are vehicles.', jidlo:'The others are things you can eat.', obleceni:'The others are things you can wear.',
+  hracky:'The others are toys.', ovoce:'The others are fruit.', zelenina:'The others are vegetables.', leta:'The others can fly.', nelet:"The others can't fly."};
+const POS_EN = {'vlevo':'on the left', 'uprostřed':'in the middle', 'vpravo':'on the right', 'nahoře':'at the top', 'dole':'at the bottom',
+  'na stole':'on the table', 'pod stolem':'under the table', 'vedle stolu':'next to the table',
+  'nahoře vlevo':'in the top left corner', 'nahoře vpravo':'in the top right corner', 'dole vlevo':'in the bottom left corner', 'dole vpravo':'in the bottom right corner'};
+function posEN(ph){
+  if (POS_EN[ph]) return POS_EN[ph];
+  let m = ph.match(/^(hned )?(vlevo|vpravo) od (.+)$/);
+  if (m) return `${m[1] ? 'directly ' : ''}to the ${m[2] === 'vlevo' ? 'left' : 'right'} of the ${PI_EN[PITEMS.find(x => x.g === m[3]).e]}`;
+  m = ph.match(/^(nad|pod) (.+)$/);
+  if (m) return `${m[1] === 'nad' ? 'above' : 'below'} the ${PI_EN[PITEMS.find(x => x.i === m[2]).e]}`;
+  return ph;
+}
+const art = n => (/^[aeiou]/.test(n) ? 'an ' : 'a ') + n;
+const isAre = n => n === 1 ? 'is' : 'are';
+const crowns = n => `${n} ${n === 1 ? 'crown' : 'crowns'}`;
+const timeEN = (h, m) => m ? `half past ${h}` : `${h} o'clock`;
+const cnt = (n, e) => `${n} ${n === 1 ? KI_EN[e][0] : KI_EN[e][1]}`;
+
+function textEN(t){
+  const o = t.op, E = {};
+  if (OPS.includes(o)){
+    const {a, b, r} = t;
+    if (t.missing === 'b') E.full = `${a} ${OPW_EN[o]} what makes ${r}?`;
+    else if (o === 'div') E.full = t.pics ? `Share ${a} ${a === 1 ? 'sweet' : 'sweets'} between ${b} friends. How many does each friend get?` : `What is ${a} divided by ${b}?`;
+    else if (o === 'mul' && t.pics) E.full = `There ${isAre(a)} ${a} ${a === 1 ? 'group' : 'groups'}. Each group has ${b} ${b === 1 ? 'picture' : 'pictures'}. How many altogether?`;
+    else E.full = `What is ${a} ${OPW_EN[o]} ${b}?` + (t.pics && o === 'add' ? ' Count the pictures.' : t.pics && o === 'sub' ? ' The crossed-out pictures are gone.' : '');
+    E.short = t.missing === 'b' ? E.full : o === 'div' ? `What is ${a} divided by ${b}?` : `What is ${a} ${OPW_EN[o]} ${b}?`;
+    E.reveal = `The answer is ${t.ans}.`;
+  } else if (o === 'cmp'){
+    const L = t.ex ? `${t.ex.x} ${OPW_EN[t.ex.op]} ${t.ex.y}` : String(t.a);
+    const rel = (l, r, s) => s === '=' ? `${l} and ${r} are equal.` : `${l} is ${s === '<' ? 'less' : 'greater'} than ${r}.`;
+    E.full = t.lv === 1 ? `Where are there more? Compare ${t.a} and ${t.b}. Which sign goes in the middle?` : `Compare ${L} and ${t.b}. Which sign goes in the middle?`;
+    E.short = `Compare ${L} and ${t.b}.`;
+    const ex = t.ex ? `${L} is ${t.a}. ` + (t.ans === '=' ? 'That is the same.' : rel(t.a, t.b, t.ans)) : rel(L, t.b, t.ans);
+    E.ok = 'Correct! ' + ex; E.reveal = 'The answer is: ' + ex;
+  } else if (o === 'shape'){
+    if (t.count){ const pl = SHAPE_EN[t.kind][1]; E.full = `How many ${pl} are there? Count them.`; E.short = `How many ${pl}?`; E.ok = `Correct! ${t.ans}.`; E.reveal = `There are ${t.ans}.`; }
+    else { const n = SHAPE_EN[t.ans][0]; E.full = `Find the ${n}.`; E.ok = `Yes, that's ${art(n)}.`; E.reveal = `This is ${art(n)}.`; }
+  } else if (o === 'pos' || o === 'p_pos'){
+    const ph = posEN(t.phrase), it = PI_EN[t.ans];
+    E.full = `What is ${ph}?`; E.ok = `Yes, the ${it} is ${ph}.`; E.reveal = `The ${it} is ${ph}.`;
+  } else if (o === 'seq' || o === 'p_seq'){
+    if (t.pattern){ E.full = 'What goes in place of the question mark? Look at how the pictures repeat.'; E.short = 'What goes in place of the question mark?';
+      E.ok = 'Yes! The pictures keep repeating.'; E.reveal = 'This picture goes here. The pictures keep repeating.'; }
+    else { const s = Math.abs(t.step), sp = t.items.join(', ');
+      E.full = 'Which number is missing?' + (t.step < 0 ? ' The numbers go down.' : s > 1 ? ` The numbers jump by ${s}.` : '');
+      E.short = 'Which number is missing?'; E.ok = `Correct! ${sp}.`; E.reveal = `${t.ans} is missing. ${sp}.`; }
+  } else if (o === 'clock'){
+    const tm = timeEN(t.h, t.m);
+    if (t.lv === 1){ E.full = 'What time is it? The short hand shows the hour, the long hand points up.'; E.short = 'What time is it?';
+      E.ok = `Yes, it's ${tm}.`; E.reveal = `It's ${tm}. The short hand points to ${t.h}.`; }
+    else { E.full = t.lv === 2 ? 'What time is it?' : `Which clock shows ${tm}?`;
+      E.ok = `Yes, it's ${tm}.` + (t.m ? ` That's ${t.h} thirty.` : ''); E.okShort = `Yes, it's ${tm}.`;
+      E.reveal = `It's ${tm}.` + (t.m ? ` The long hand points down, the short hand is between ${t.h} and ${nextH(t.h)}.` : ' The long hand points up.'); }
+  } else if (o === 'money'){
+    if (t.coins){ const c = t.coins.join(' plus ');
+      E.full = 'How many crowns are there? Add up the coins.'; E.short = 'How many crowns?';
+      E.ok = `Yes, ${c} makes ${crowns(t.ans)}.`; E.okShort = `Yes, ${crowns(t.ans)}.`; E.reveal = `${c} makes ${crowns(t.ans)}.`; }
+    else {
+      const nm = BUY_EN[t.item.e], cost = nm === 'crayons' ? 'The crayons cost' : `The ${nm} costs`;
+      if (t.pay){ const c = t.ans.split('+').join(' plus ');
+        E.full = `${cost} ${crowns(t.price)}. Which coins pay exactly that?`; E.short = `Pay ${crowns(t.price)}.`;
+        E.ok = `Yes! ${c} makes ${crowns(t.price)}.`; E.reveal = `Pay like this: ${c} makes ${crowns(t.price)}.`; }
+      else { E.full = `You have ${crowns(t.have)}. ${cost} ${crowns(t.price)}. How many crowns are left?`; E.short = 'How many crowns are left?';
+        E.ok = `Yes, ${t.have} minus ${t.price} is ${t.ans}. You have ${crowns(t.ans)} left.`; E.okShort = `Yes, ${crowns(t.ans)} left.`;
+        E.reveal = `${t.have} minus ${t.price} is ${t.ans}. You have ${crowns(t.ans)} left.`; }
+    }
+  } else if (o === 'sym'){
+    const wh = t.axis === 'v' ? 'on the right' : 'at the bottom';
+    E.full = `The picture should be symmetrical along the red line. Which half goes ${wh}?`; E.short = `Which half goes ${wh}?`;
+    E.ok = 'Yes! Both halves are like in a mirror.'; E.reveal = `This half goes ${wh}. It's like in a mirror.`;
+  } else if (o === 'p_count'){
+    const pl = KI_EN[t.item.e][1], c = cnt(t.n, t.item.e);
+    if (t.show){ E.full = `Show me ${c}.`; E.ok = `Yes, here ${isAre(t.n)} ${c}.`; }
+    else { E.full = `How many ${pl} are there? Count them.`; E.short = `How many ${pl}?`; E.ok = `Yes, there ${isAre(t.n)} ${c}.`; }
+    E.reveal = `There ${isAre(t.n)} ${c}.`;
+  } else if (o === 'p_color'){
+    if (t.optType === 'color'){ const c = COLOR_EN[t.ans]; E.full = `Show me ${c}.`; E.ok = `Yes, that's ${c}.`; E.reveal = `This is ${c}.`; }
+    else { const [ob, co] = t.ans.split(':'), x = `${COLOR_EN[co]} ${COBJ_EN[ob]}`; E.full = `Find the ${x}.`; E.ok = `Yes, that's ${art(x)}.`; E.reveal = `This is ${art(x)}.`; }
+  } else if (o === 'p_shape'){
+    const n = SHAPE_EN[t.ans][0];
+    if (t.same){ E.full = 'Find the same shape as the one at the top.'; E.short = 'Find the same shape.'; E.ok = `Yes, that's ${art(n)} too.`; E.reveal = `This is ${art(n)} too.`; }
+    else { E.full = `Find the ${n}.`; E.ok = `Yes, that's ${art(n)}.`; E.reveal = `This is ${art(n)}.`; }
+  } else if (o === 'p_size'){
+    const big = t.ans === 'L'; let wd, noun;
+    if (t.dim === 'item'){ noun = KI_EN[t.item.e][0]; wd = t.lv === 1 ? (big ? 'bigger' : 'smaller') : (big ? 'biggest' : 'smallest'); }
+    else if (t.dim === 'len'){ noun = 'pencil'; wd = big ? 'longest' : 'shortest'; }
+    else { noun = 'tower'; wd = big ? 'tallest' : 'lowest'; }
+    const is = (t.lv === 1 && t.dim === 'item' ? '' : 'the ') + wd;
+    E.full = `Show me the ${wd} ${noun}.`; E.ok = `Yes, this one is ${is}.`; E.reveal = `This one is ${is}.`;
+  } else if (o === 'p_odd'){
+    E.full = "Which one doesn't belong?"; E.ok = 'Yes! ' + ODD_EN[t.maj]; E.reveal = "This one doesn't belong. " + ODD_EN[t.maj];
+  } else if (o === 'p_pair'){
+    if (t.kind === 'same'){ E.full = 'Find the same picture as the one at the top.'; E.short = 'Find the same picture.'; E.ok = 'Yes, they are the same!'; E.reveal = 'This one is the same.'; }
+    else if (t.kind === 'sound'){ const [n, sd] = SOUND_EN[t.ans]; E.full = `Who says ${sd}?`; E.ok = `Yes, the ${n} says ${sd}.`; E.reveal = `The ${n} says ${sd}.`; }
+    else if (t.kind === 'food'){ const [n, f] = FOOD_EN[t.sample]; E.full = `What does the ${n} like?`; E.ok = `Yes, the ${n} likes ${f}.`; E.reveal = `The ${n} likes ${f}.`; }
+    else { E.full = 'Whose shadow is this? Find the picture that matches it.'; E.short = 'Whose shadow is this?'; E.ok = "Yes, that's its shadow."; E.reveal = 'This is its shadow.'; }
+  } else if (o === 'p_digit'){
+    if (t.listen){ E.full = `Where is the number ${t.n}?`; E.ok = `Yes, that's the number ${t.n}.`; E.reveal = `This is the number ${t.n}.`; }
+    else { const c = cnt(t.n, t.item.e);
+      E.full = 'Which number goes with the pictures? Count them.'; E.short = 'Which number goes with the pictures?';
+      E.ok = `Yes, there ${isAre(t.n)} ${c}. That's the number ${t.n}.`; E.okShort = `Yes, ${t.n}.`; E.reveal = `There ${isAre(t.n)} ${c}. That's the number ${t.n}.`; }
+  } else if (o === 'm_gone'){
+    const g = PI_EN[t.ans];
+    E.intro = 'Look carefully at the pictures. Then one of them will disappear.'; E.introShort = 'Look at the pictures.';
+    E.full = 'What disappeared?'; E.ok = `Yes, the ${g} disappeared.`; E.reveal = `The ${g} disappeared.`;
+  } else if (o === 'm_pairs'){
+    E.full = 'Find the matching pairs. Turn over two cards at a time.';
+  } else if (o === 'm_simon'){
+    E.full = 'Watch and listen. Then repeat it.'; E.short = 'Watch and listen.';
+    E.ok = ['Well done, exactly right!', 'Yes, in exactly that order!', 'Great, you remembered it!'][Math.abs(t.seq.length + t.seq[0]) % 3]; E.reveal = 'It went like this.';
+  } else if (o === 'a_find'){
+    E.full = `Find all the ${KI_EN[t.ans][1]}.`; E.ok = `Yes, there are ${cnt(t.count, t.ans)}.`; E.reveal = 'Here are some more.';
+  } else if (o === 'a_diff'){
+    E.full = 'The pictures are almost the same. Find what is different.'; E.short = 'Find what is different.'; E.ok = 'Yes, this is different!'; E.reveal = 'This was different.';
+  } else if (o === 'a_same'){
+    E.full = 'Find the row that is exactly the same as the one at the top.'; E.short = 'Find the same row.'; E.ok = 'Yes, this one is exactly the same.'; E.reveal = 'This one is exactly the same.';
+  }
+  return E;
+}
+function textCS(t){
+  const o = t.op, C = { full: t.speech, ok: t.okSay, reveal: t.revealSay, intro: t.intro };
+  if (OPS.includes(o)){ if (t.missing !== 'b') C.short = o === 'div' ? `Kolik je ${w(t.a)} děleno ${INS[t.b]}?` : `Kolik je ${w(t.a)} ${WORD[o]} ${w(t.b)}?`; }
+  else if (o === 'cmp') C.short = `Porovnej ${t.ex ? `${w(t.ex.x)} ${WORD[t.ex.op]} ${w(t.ex.y)}` : w(t.a)} a ${w(t.b)}.`;
+  else if (o === 'shape' && t.count) C.short = `Kolik je tu ${SHAPES[t.kind].gp}?`;
+  else if (o === 'seq' || o === 'p_seq') C.short = t.pattern ? 'Co patří místo otazníku?' : 'Které číslo chybí?';
+  else if (o === 'clock'){ if (t.lv === 1) C.short = 'Kolik je hodin?'; C.okShort = `Ano, ${timePhrase(t.h, t.m)}.`; }
+  else if (o === 'money'){
+    if (t.coins){ C.short = 'Kolik je tu korun?'; C.okShort = `Ano, ${korun(t.ans)}.`; }
+    else if (t.pay) C.short = `Zaplať ${korun(t.price)}.`;
+    else { C.short = 'Kolik korun ti zbyde?'; C.okShort = `Ano, zbyde ti ${korun(t.ans)}.`; }
+  }
+  else if (o === 'sym') C.short = `Která polovina patří ${t.axis === 'v' ? 'vpravo' : 'dolů'}?`;
+  else if (o === 'p_count' && !t.show) C.short = `Kolik je tu ${t.item.p5}?`;
+  else if (o === 'p_shape' && t.same) C.short = 'Najdi stejný tvar.';
+  else if (o === 'p_pair'){ if (t.kind === 'same') C.short = 'Najdi stejný obrázek.'; if (t.kind === 'shadow') C.short = 'Čí je to stín?'; }
+  else if (o === 'p_digit' && !t.listen){ C.short = 'Které číslo patří k obrázkům?'; C.okShort = `Ano, číslo ${w(t.n)}.`; }
+  else if (o === 'm_gone') C.introShort = 'Prohlédni si obrázky.';
+  else if (o === 'm_simon') C.short = 'Dívej se a poslouchej.';
+  else if (o === 'a_diff') C.short = 'Najdi, co je jinak.';
+  else if (o === 'a_same') C.short = 'Najdi stejnou řadu.';
+  return C;
+}
+// Texty úlohy v jazyce (s doplněním krátkých tvarů), uložené v úloze
+function texts(t, lang){
+  const k = '_tx_' + lang;
+  if (!t[k]){
+    const x = lang === 'en' ? textEN(t) : textCS(t);
+    x.short = x.short || x.full; x.okShort = x.okShort || x.ok; x.introShort = x.introShort || x.intro;
+    t[k] = x;
+  }
+  return t[k];
+}
+// Úlohy se stejným klíčem jdou za sebou jako „blok“: první má celé zadání, další krátké
+const VARIANT_FIELDS = ['missing','pics','count','pay','change','kind','dim','show','listen','pattern','same','axis','optType'];
+const variantKey = t => t.op + '|' + t.lv + '|' + VARIANT_FIELDS.map(k => t[k] === undefined ? '' : String(t[k])).join(',');
+
 if (typeof module !== 'undefined') module.exports = { R, w, pl, GEN, make, choices, adapt, nextOp, speech, STICKERS, OPS, KINDS, SHAPES, PITEMS, freshState, migrate, encodeBackup, decodeBackup, STATE_KEY, STATE_VER, hparse, mirV, mirH, tkey, nextH,
-  SCHOOL_KINDS, PRE_KINDS, BRAIN, BRAIN_MIX, PROFILES, digitOpen, KITEMS, kCount, PCOLORS, COBJ, PSHAPES, ODD, SOUNDS, FOOD, SIMON, PEXESO, LOOK, dOf };
+  SCHOOL_KINDS, PRE_KINDS, BRAIN, BRAIN_MIX, PROFILES, digitOpen, KITEMS, kCount, PCOLORS, COBJ, PSHAPES, ODD, SOUNDS, FOOD, SIMON, PEXESO, LOOK, dOf, LANGS, texts, textEN, textCS, variantKey, posEN };
 </script>
 
 <script>
@@ -1132,17 +1325,21 @@ save();
 try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch(e){}
 
 // --- hlas ---
-let voice = null, voicesChecked = false;
+const VOICES = { cs: null, en: null };
+let voicesChecked = false;
 function pickVoice(){
   if (!('speechSynthesis' in window)) return;
   const vs = speechSynthesis.getVoices();
   if (!vs.length) return;
   voicesChecked = true;
-  voice = vs.find(v => /^cs([-_]|$)/i.test(v.lang) && v.localService) || vs.find(v => /^cs/i.test(v.lang)) || null;
-  $('#novoice').hidden = !!voice;
+  const find = (re, pref) => vs.find(v => pref.test(v.lang) && v.localService) || vs.find(v => pref.test(v.lang)) || vs.find(v => re.test(v.lang) && v.localService) || vs.find(v => re.test(v.lang)) || null;
+  VOICES.cs = find(/^cs/i, /^cs([-_]|$)/i);
+  VOICES.en = find(/^en/i, /^en[-_]GB/i);                 // britská angličtina (vlajka), jinak jakákoli
+  voiceWarn();
 }
+function voiceWarn(){ if (voicesChecked || !('speechSynthesis' in window)) $('#novoice').hidden = !!VOICES[S.lang || 'cs']; }
 if ('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
-setTimeout(() => { pickVoice(); if (!('speechSynthesis' in window) || (!voicesChecked)) $('#novoice').hidden = !!voice; }, 2000);
+setTimeout(() => { pickVoice(); voiceWarn(); }, 2000);
 
 let sayToken = 0;
 function say(text, onend){
@@ -1152,13 +1349,88 @@ function say(text, onend){
   if (!('speechSynthesis' in window)){ setTimeout(fin, 700); return; }
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'cs-CZ'; if (voice) u.voice = voice;
+  const lang = S.lang === 'en' ? 'en' : 'cs';
+  u.lang = lang === 'en' ? 'en-GB' : 'cs-CZ'; if (VOICES[lang]) u.voice = VOICES[lang];
   u.rate = P().rate; u.pitch = 1.1;
   u.onend = fin; u.onerror = fin;
   setTimeout(fin, 1500 + text.length * 85);      // pojistka, když prohlížeč onend nepošle
   speechSynthesis.speak(u);
 }
 function hush(){ sayToken++; if ('speechSynthesis' in window) speechSynthesis.cancel(); }
+
+// --- hlášky UI v obou jazycích ---
+const TX = {
+  cs: {
+    OK: ['Správně!', 'Výborně!', 'Skvělé!', 'Paráda!', 'Bezva!', 'Super!'],
+    AGAIN: ['Ještě jednou.', 'Zkus to znovu.', 'Skoro! Zkus to ještě jednou.'],
+    PRE_AGAIN: ['Zkus jiný.', 'Hmm, ještě jednou.', 'Skoro. Zkus jiný.'],
+    next: 'Příště to dáš!', answerIs: v => `Správně je ${w(v)}.`, hint: 'Podívej, tady to je. Klepni na to.', hereItIs: 'Ano, tady to je!',
+    three: 'Tři za sebou!', five: 'Pět za sebou!', star: 'Jsi hvězda!', many: n => `Neuvěřitelné! Už ${w(n)} za sebou!`,
+    simonAgain: 'Ještě jednou. Dívej se a poslouchej.', yourTurn: '👆 Teď ty!', findNo: 'Tohle ne. Hledej dál.', diffNo: 'Tady ne. Podívej se ještě jednou.',
+    pair: ['Dvojice!', 'Máš je!', 'Super!', 'Paráda!'], allPairs: 'Všechny dvojice!',
+    digitLocked: 'Číslice se odemknou, až budeš umět počítat obrázky do pěti.', brain: 'Paměť a pozornost!',
+    hello: pre => pre ? 'Ahoj Rostíku! Vyber si hru.' : 'Ahoj Marianko! Vyber si hru.', langName: 'Čeština!',
+    end: (n, perfect, g) => (perfect ? 'Úžasné! Všechno napoprvé! ' : '') + (n === 0 ? 'Hotovo! Za snahu dostáváš novou samolepku.' : `Hotovo! ${g === 'f' ? 'Získala' : 'Získal'} jsi ${w(n,'fa')} ${pl(n,'hvězdičku','hvězdičky','hvězdiček')} a novou samolepku.`),
+    album: n => n ? `Máš ${w(n,'fa')} ${pl(n,'samolepku','samolepky','samolepek')}.` : 'Zatím tu nic není. Zahraj si a získej první samolepku!',
+    mode: m => MODE_NAME[m]
+  },
+  en: {
+    OK: ['Correct!', 'Well done!', 'Great!', 'Brilliant!', 'Super!', 'Nice!'],
+    AGAIN: ['Once more.', 'Try again.', 'Almost! Try once more.'],
+    PRE_AGAIN: ['Try another one.', 'Hmm, once more.', 'Almost. Try another one.'],
+    next: "You'll get it next time!", answerIs: v => `The answer is ${v}.`, hint: 'Look, here it is. Tap it.', hereItIs: 'Yes, here it is!',
+    three: 'Three in a row!', five: 'Five in a row!', star: "You're a star!", many: n => `Amazing! ${n} in a row!`,
+    simonAgain: 'Once more. Watch and listen.', yourTurn: '👆 Your turn!', findNo: 'Not that one. Keep looking.', diffNo: 'Not here. Look again.',
+    pair: ['A pair!', 'Got them!', 'Super!', 'Great!'], allPairs: 'All the pairs!',
+    digitLocked: 'Numbers will unlock when you can count pictures up to five.', brain: 'Memory and attention!',
+    hello: pre => pre ? 'Hello Rostík! Choose a game.' : 'Hello Marianka! Choose a game.', langName: 'English!',
+    end: (n, perfect) => (perfect ? 'Amazing! Everything right the first time! ' : '') + (n === 0 ? 'Done! Here is a new sticker for trying.' : `Done! You got ${n} ${n === 1 ? 'star' : 'stars'} and a new sticker.`),
+    album: n => n ? `You have ${n} ${n === 1 ? 'sticker' : 'stickers'}.` : 'Nothing here yet. Play and get your first sticker!',
+    mode: m => MODE_EN[m]
+  }
+};
+const MODE_EN = { add:'Addition', sub:'Subtraction', mul:'Multiplication', div:'Division', cmp:'Comparing', shape:'Shapes', pos:'Where is it?', seq:'Patterns', clock:'Clocks', money:'Money', sym:'Symmetry', mix:'Everything together',
+  p_count:'How many?', p_color:'Colours', p_shape:'Shapes', p_size:'Big and small', p_pos:'Where is it?', p_seq:'Patterns', p_odd:"Which one doesn't belong?", p_pair:'Find the pair', p_digit:'Numbers',
+  m_gone:'What disappeared?', m_pairs:'Memory game', m_simon:'Repeat after me', a_find:'Find them all', a_diff:'Spot the difference', a_same:'Same row' };
+const Lx = () => TX[S.lang === 'en' ? 'en' : 'cs'];
+const TT = t => texts(t, S.lang === 'en' ? 'en' : 'cs');                    // texty úlohy v aktuálním jazyce
+const ask = t => t.useShort ? TT(t).short : TT(t).full;                       // zadání: celé na začátku bloku, pak krátké
+// celé zadání v aktuálním jazyce (vlajka, 🔊, ucho)
+function sayFull(){
+  if (!task) return;
+  const x = TT(task);
+  say(task.op === 'm_gone' && !task.hidden ? x.intro : x.full);
+}
+
+// --- vlajky: přepnutí jazyka kdykoli, s přečtením celého zadání ---
+let flagId = 0;
+function flagSVG(l){
+  if (l === 'cs') return '<svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="20" fill="#fff"/><rect y="20" width="60" height="20" fill="#d7141a"/><path d="M0 0 L30 20 L0 40 Z" fill="#11457e"/></svg>';
+  const id = 'uk' + (++flagId);
+  return `<svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><clipPath id="${id}"><path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#${id})" stroke="#C8102E" stroke-width="4"/><path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/><path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/></svg>`;
+}
+for (const box of document.querySelectorAll('.flags')) for (const l of LANGS){
+  const b = document.createElement('button'); b.className = 'flag'; b.dataset.lang = l; b.setAttribute('aria-label', l === 'cs' ? 'Česky' : 'English');
+  b.innerHTML = flagSVG(l);
+  b.addEventListener('click', () => setLang(l));
+  box.appendChild(b);
+}
+function setLang(l){
+  actx();
+  S.lang = l; save(); applyLang();
+  if (task && round && !$('#game').hidden) sayFull();
+  else say(Lx().langName);
+}
+function applyLang(){
+  const en = S.lang === 'en';
+  document.documentElement.lang = en ? 'en' : 'cs';
+  for (const e of document.querySelectorAll('[data-en]')){ if (e.dataset.cs === undefined) e.dataset.cs = e.textContent; e.textContent = en ? e.dataset.en : e.dataset.cs; }
+  for (const b of document.querySelectorAll('.flag')) b.classList.toggle('on', b.dataset.lang === (en ? 'en' : 'cs'));
+  const t = en ? P().titleEn : P().title;
+  $('#h-title').innerHTML = `${t[0]}<span>${t[1]}</span>`;
+  document.title = t.join('');
+  voiceWarn();
+}
 
 // --- zvuky ---
 let ac = null;
@@ -1250,8 +1522,7 @@ function show(id){ for (const s of document.querySelectorAll('.screen')) s.hidde
 function homeRender(){
   const pr = P();
   document.body.classList.toggle('pre', isPre());
-  $('#h-title').innerHTML = `${pr.title[0]}<span>${pr.title[1]}</span>`;
-  document.title = pr.title.join('');
+  applyLang();
   $('#tiles-skolak').hidden = isPre(); $('#tiles-predskolak').hidden = !isPre();
   $('#h-stars').textContent = S.stars;
   $('#h-stk').textContent = S.stickers.length;
@@ -1269,25 +1540,26 @@ const MODE_NAME = { add:'Sčítání', sub:'Odčítání', mul:'Násobení', div
 for (const b of document.querySelectorAll('.tile[data-mode]')) b.addEventListener('click', () => {
   actx();
   const mode = b.dataset.mode;
-  if (mode === 'p_digit' && !digitOpen(S)){ sfx('soft'); say('Číslice se odemknou, až budeš umět počítat obrázky do pěti.'); return; }
+  if (mode === 'p_digit' && !digitOpen(S)){ sfx('soft'); say(Lx().digitLocked); return; }
   sfx('tap');
-  say(MODE_NAME[mode] + (/[?!]$/.test(MODE_NAME[mode]) ? '' : '!'), () => startRound(mode));
+  const nm = Lx().mode(mode);
+  say(nm + (/[?!]$/.test(nm) ? '' : '!'), () => startRound(mode));
 });
 for (const b of document.querySelectorAll('.to-album')) b.addEventListener('click', () => { actx(); sfx('tap'); albumRender(); });
-for (const b of document.querySelectorAll('.to-brain')) b.addEventListener('click', () => { actx(); sfx('tap'); brainRender(); say('Paměť a pozornost!'); });
+for (const b of document.querySelectorAll('.to-brain')) b.addEventListener('click', () => { actx(); sfx('tap'); brainRender(); say(Lx().brain); });
 $('#b-home').addEventListener('click', () => { sfx('tap'); hush(); homeRender(); });
 $('#a-home').addEventListener('click', () => { sfx('tap'); hush(); homeRender(); });
 $('#e-home').addEventListener('click', () => { sfx('tap'); back(round && round.mode); });
 $('#e-again').addEventListener('click', () => { sfx('tap'); startRound(round.mode); });
 $('#g-home').addEventListener('click', () => { const m = round && round.mode; round = null; task = null; back(m); });
-$('#g-say').addEventListener('click', () => { if (task) (task.repeat ? task.repeat() : say(task.speech)); });
+$('#g-say').addEventListener('click', () => { if (task) (task.repeat ? task.repeat() : sayFull()); });
 
 // --- výběr hráče (nové zařízení) ---
 for (const b of document.querySelectorAll('#who [data-prof]')) b.addEventListener('click', () => {
   actx(); sfx('tap');
   S.profile = b.dataset.prof; save();
   homeRender();
-  say(isPre() ? 'Ahoj Rostíku! Vyber si hru.' : 'Ahoj Marianko! Vyber si hru.');
+  say(Lx().hello(isPre()));
 });
 
 // --- rodiče: dlouhý stisk (2 s) na nadpis ---
@@ -1349,8 +1621,9 @@ function nextTask(){
   const op = nextOp(round.mode, round.prevOp, S.profile || 'skolak', S); round.prevOp = op;
   task = GEN[op](S.levels[op], S.profile || 'skolak');
   tries = 0; locked = false; round.hint = false;
+  const key = variantKey(task); task.useShort = round.lastKey === key; round.lastKey = key;   // další úloha stejného typu: krátké zadání
   renderTask();
-  if (task.start) task.start(); else say(task.speech);
+  if (task.start) task.start(); else say(ask(task));
 }
 
 function renderDots(){
@@ -1441,7 +1714,7 @@ function renderShape(t, p){
     return;
   }
   const b = el('button', 'listen', '👂'); b.setAttribute('aria-label', 'Zopakovat');
-  b.addEventListener('click', () => say(task.speech));
+  b.addEventListener('click', sayFull);
   p.appendChild(b);
 }
 
@@ -1505,7 +1778,7 @@ function halfGrid(g, cell, color, unknown){
 }
 
 function renderClock(t, p){
-  if (t.lv === 3){ const b = el('button', 'listen', '👂'); b.addEventListener('click', () => say(task.speech)); p.appendChild(b); return; }
+  if (t.lv === 3){ const b = el('button', 'listen', '👂'); b.addEventListener('click', sayFull); p.appendChild(b); return; }
   const c = el('div', 'clock'); c.innerHTML = clockSVG(t.h, t.m); p.appendChild(c);
 }
 function renderMoney(t, p){
@@ -1536,7 +1809,7 @@ function renderSym(t, p){
 
 // ===================== fáze 4: předškolák =====================
 const VW = () => window.innerWidth, VH = () => window.innerHeight;
-function listen(a, b2){ const p = b2 || a; const b = el('button', 'listen', '👂'); b.setAttribute('aria-label', 'Zopakovat'); b.addEventListener('click', () => say(task.speech)); p.appendChild(b); }
+function listen(a, b2){ const p = b2 || a; const b = el('button', 'listen', '👂'); b.setAttribute('aria-label', 'Zopakovat'); b.addEventListener('click', sayFull); p.appendChild(b); }
 function sampleBox(content, cls = ''){ const d = el('div', 'sample ' + cls); if (typeof content === 'string') d.innerHTML = content; else d.appendChild(content); return d; }
 function renderPCount(t, p){
   if (t.show) return listen(p);
@@ -1589,16 +1862,16 @@ function renderGone(t, p){
       cur.classList.add('on'); requestAnimationFrame(() => requestAnimationFrame(() => cur.classList.remove('on')));
       bar.style.visibility = 'hidden';
       $('#answers').classList.remove('wait'); locked = false;
-      say(t.speech);
+      say(TT(t).full);
     }, 700);
   };
-  t.start = () => say(t.intro, () => {
+  t.start = () => say(t.useShort ? TT(t).introShort : TT(t).intro, () => {
     if (!alive(t)) return;
     fill.style.transitionDuration = t.showMs + 'ms';
     requestAnimationFrame(() => requestAnimationFrame(() => { fill.style.width = '0%'; }));
     setTimeout(hide, t.showMs);
   });
-  t.repeat = () => say(t.hidden ? t.speech : t.intro);
+  t.repeat = sayFull;
 }
 
 // Zopakuj pořadí – zvířátka se rozsvítí a zahrají tón, dítě je klepne ve stejném pořadí
@@ -1626,8 +1899,8 @@ function renderSimon(t, p){
     };
     setTimeout(step, 450);
   };
-  const go = () => { locked = false; showBanner('👆 Teď ty!'); };
-  t.start = () => say(t.speech, () => t.play(go));
+  const go = () => { locked = false; showBanner(Lx().yourTurn); };
+  t.start = () => say(ask(t), () => t.play(go));
   t.repeat = () => { if (!locked) t.play(go); };
 }
 function sdRender(t){ t.sdots.innerHTML = ''; t.seq.forEach((_, i) => t.sdots.appendChild(el('i', i < t.input.length ? 'on' : ''))); }
@@ -1642,9 +1915,9 @@ function simonTap(t, i, b){
   }
   tries++; round.streak = 0; t.input = []; locked = true;
   setTimeout(() => sfx(isPre() ? 'soft' : 'bad'), 200);
-  if (tries < 2) return say('Ještě jednou. Dívej se a poslouchej.', () => t.play(() => { locked = false; }));
+  if (tries < 2) return say(Lx().simonAgain, () => t.play(() => { locked = false; }));
   scoreMiss();
-  say(t.revealSay, () => t.play(() => missSay('')));
+  say(TT(t).reveal, () => t.play(() => missSay('')));
 }
 
 // Najdi všechny – klepnout na všechny stejné obrázky
@@ -1670,10 +1943,10 @@ function findTap(t, i, c){
     return;
   }
   tries++; round.streak = 0; shakeEl(c); sfx(isPre() ? 'soft' : 'bad');
-  if (tries < 2) return say('Tohle ne. Hledej dál.');
+  if (tries < 2) return say(Lx().findNo);
   scoreMiss();
   t.cellEls.forEach((x, k) => { if (t.cells[k] === t.ans && !x.classList.contains('got')) x.classList.add('reveal'); });
-  missSay(t.revealSay);
+  missSay(TT(t).reveal);
 }
 
 // Najdi rozdíl – dvě mřížky, jedno políčko je jinak
@@ -1699,10 +1972,10 @@ function diffTap(t, k, c){
   const both = [t.pairEls[0][k], t.pairEls[1][k]];
   if (k === t.di){ both.forEach(x => x.classList.add('got')); return scoreOk(c); }
   tries++; round.streak = 0; both.forEach(shakeEl); sfx(isPre() ? 'soft' : 'bad');
-  if (tries < 2) return say('Tady ne. Podívej se ještě jednou.');
+  if (tries < 2) return say(Lx().diffNo);
   scoreMiss();
   [t.pairEls[0][t.di], t.pairEls[1][t.di]].forEach(x => x.classList.add('reveal'));
-  missSay(t.revealSay);
+  missSay(TT(t).reveal);
 }
 
 // Pexeso – jedno kolo = jedna hrací plocha, hvězdička za každou dvojici
@@ -1721,7 +1994,7 @@ function startBoard(){
     c.addEventListener('click', () => cardTap(t, i, c)); box.appendChild(c); return c;
   });
   p.appendChild(box);
-  say(t.speech);
+  say(TT(t).full);
 }
 function cardTap(t, i, c){
   const B = round && round.board;
@@ -1735,12 +2008,12 @@ function cardTap(t, i, c){
     round.res[B.found] = 'first'; B.found++; round.i = B.found;
     round.stars++; S.stars++; save();
     flyStar(c); renderDots(); sfx('pair');
-    if (B.found < t.pairs) return say(pick(['Dvojice!', 'Máš je!', 'Super!', 'Paráda!']));
+    if (B.found < t.pairs) return say(pick(Lx().pair));
     locked = true;
     const good = B.mistakes <= t.pairs, poor = B.mistakes > t.pairs * 2 + 2;
     if (good || poor) adapt(S, 'm_pairs', good, 2, 2);
     save();
-    return say('Všechny dvojice! ' + pick(OK), () => setTimeout(endRound, 400));
+    return say(Lx().allPairs + ' ' + pick(Lx().OK), () => setTimeout(endRound, 400));
   }
   B.mistakes++; locked = true;
   setTimeout(() => { if (!alive(t)) return; for (const k of [x, y]) t.cardEls[k].classList.remove('up'); locked = false; }, isPre() ? 1300 : 1000);
@@ -1807,10 +2080,12 @@ function scoreOk(flyFrom){
   round.streak = first ? round.streak + 1 : 0;
   adapt(S, task.op, first, P().up, P().down); save();
   if (flyFrom) flyStar(flyFrom);
-  let phrase = task.okSay || pick(OK);
-  if (round.streak === 3){ phrase = 'Tři za sebou! ' + phrase; showBanner('🔥 3× za sebou!'); }
-  else if (round.streak === 5){ phrase = 'Pět za sebou! ' + (task.okSay || 'Jsi hvězda!'); showBanner('🌟 5× za sebou!'); }
-  else if (round.streak > 5 && round.streak % 5 === 0){ phrase = 'Neuvěřitelné! Už ' + w(round.streak) + ' za sebou! ' + (task.okSay || ''); showBanner('🚀 ' + round.streak + '× za sebou!'); }
+  const x = TT(task), Lt = Lx();
+  const okTxt = first && task.useShort ? x.okShort : x.ok;          // opakovaná úloha napoprvé: kratší pochvala
+  let phrase = okTxt || pick(Lt.OK);
+  if (round.streak === 3){ phrase = Lt.three + ' ' + phrase; showBanner('🔥 3×'); }
+  else if (round.streak === 5){ phrase = Lt.five + ' ' + (okTxt || Lt.star); showBanner('🌟 5×'); }
+  else if (round.streak > 5 && round.streak % 5 === 0){ phrase = Lt.many(round.streak) + ' ' + (okTxt || ''); showBanner('🚀 ' + round.streak + '×'); }
   renderDots();
   say(phrase, () => setTimeout(advance, 350));
 }
@@ -1821,7 +2096,7 @@ function scoreMiss(){
   adapt(S, task.op, false, P().up, P().down); save();
   renderDots();
 }
-function missSay(text){ say((text ? text + ' ' : '') + 'Příště to dáš!', () => setTimeout(advance, 900)); }
+function missSay(text){ say((text ? text + ' ' : '') + Lx().next, () => setTimeout(advance, 900)); }
 
 function answer(val, btn){
   if (btn.disabled || !round) return;
@@ -1830,7 +2105,7 @@ function answer(val, btn){
     round.hint = false;
     btn.classList.remove('hint'); btn.classList.add('ok');
     solvedVisual('shown'); sfx('ok');
-    return say(task.okSay || 'Ano, tady to je!', () => setTimeout(advance, 400));
+    return say(TT(task).ok || Lx().hereItIs, () => setTimeout(advance, 400));
   }
   if (locked) return;
   actx();
@@ -1839,18 +2114,18 @@ function answer(val, btn){
   btn.classList.add(isPre() ? 'nope' : 'bad'); btn.disabled = true;
   sfx(isPre() ? 'soft' : 'bad');
   round.streak = 0;
-  if (tries < 2){ say(pick(isPre() ? PRE_AGAIN : AGAIN)); return; }
+  if (tries < 2){ say(pick(isPre() ? Lx().PRE_AGAIN : Lx().AGAIN)); return; }
   scoreMiss();
   const right = [...document.querySelectorAll('.ans')].find(b => b.dataset.v === String(task.ans));
   if (isPre()){
     for (const b of document.querySelectorAll('.ans')) if (b !== right) b.disabled = true;
     right.classList.add('hint'); round.hint = true;
-    say('Podívej, tady to je. Klepni na to.');
+    say(Lx().hint);
     return;
   }
   right.classList.add('reveal');
   solvedVisual('shown');
-  missSay(task.revealSay || 'Správně je ' + w(task.ans) + '.');
+  missSay(TT(task).reveal || Lx().answerIs(task.ans));
 }
 function advance(){ if (!round) return; round.i++; nextTask(); }
 
@@ -1885,10 +2160,7 @@ function endRound(){
   show('end');
   sfx('win');
   const n = r.stars;
-  let txt = `Hotovo! ${P().g === 'f' ? 'Získala' : 'Získal'} jsi ${w(n,'fa')} ${pl(n,'hvězdičku','hvězdičky','hvězdiček')} a novou samolepku.`;
-  if (n === 0) txt = 'Hotovo! Za snahu dostáváš novou samolepku.';
-  if (perfect) txt = 'Úžasné! Všechno napoprvé! ' + txt;
-  say(txt);
+  say(Lx().end(n, perfect, P().g));
 }
 
 function albumRender(){
@@ -1899,9 +2171,10 @@ function albumRender(){
     g.appendChild(el('div', 'slot' + (have ? '' : ' empty'), have || '?'));
   }
   show('album');
-  say(n ? `Máš ${w(n,'fa')} ${pl(n,'samolepku','samolepky','samolepek')}.` : 'Zatím tu nic není. Zahraj si a získej první samolepku!');
+  say(Lx().album(n));
 }
 
+applyLang();
 if (S.profile) homeRender(); else show('who');
 if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
 </script>

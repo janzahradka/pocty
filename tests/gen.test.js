@@ -161,6 +161,7 @@ chk(m2.adapt.seq, {up:3, down:0}, 'migrace v2 adapt'); chk(m2.ver, L.STATE_VER, 
 chk(L.decodeBackup(L.encodeBackup(v2)).stars, 187, 'záloha z v2 jde obnovit');
 
 require('./faze4.part.js')(L, bad, chk);
+require('./faze5.part.js')(L, bad, chk);
 
 console.log(fails ? `\n${fails} CHYB` : '\nVše OK');
 process.exit(fails ? 1 : 0);
